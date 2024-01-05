@@ -1,0 +1,8 @@
+.nodeDiv{
+    position: absolute;
+    background: lightblue;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    z-index: 100;
+}

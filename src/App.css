@@ -1,0 +1,40 @@
+/* General Structure  */
+
+#root {
+  width: 100%;
+  height: 100%;
+  margin: auto auto;
+  text-align: center;
+}
+
+.topBarDiv{
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 15%;
+  z-index: 0;
+  border: 5px solid #73AD21;
+  background-color: gray;
+  z-index: 200;
+}
+
+.statsMenuDiv{
+  position: fixed;
+  left: 0px;
+  bottom: 0;
+  width: 19%;
+  height: 83%;
+  border: 5px solid #228fc9;
+  background-color: antiquewhite;
+  z-index: 200;
+}
+
+.canvasDiv{
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 80%;
+  height: 83%;
+  border: 5px solid #c9222d;
+  background-color: white;
+}

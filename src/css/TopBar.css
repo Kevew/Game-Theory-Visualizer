@@ -1,0 +1,19 @@
+/* General Structure of TopBar*/
+
+.controlPanelDiv{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 85%;
+    height: 100%;
+    border: 5px solid #14114f;
+}
+
+.visualizeButtonDiv{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    border: 5px solid #515154;
+}
