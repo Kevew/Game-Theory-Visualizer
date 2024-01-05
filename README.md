@@ -1,30 +1,46 @@
-# React + TypeScript + Vite
+# Game Theory Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> An interactive React-based web app that allows users to simulate Game Theory strategies against each other
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Node.js](https://nodejs.org/en/) 18+
 
-## Expanding the ESLint configuration
+## Local Hosting
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To get started:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+git clone https://github.com/Kevew/Game-Theory-Visualizer.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Install dependencies (npm or yarn or pnpm)
+
+To make sure the website is running, you need to install the packages for the frontend. First make, sure you are in the project by 
+
+```bash
+cd Game-Theory-Visualizer
+```
+and then calling
+
+```bash
+npm install
+```
+
+## Start the local deployment
+
+Once you've runned the command below, you should be given a localhost:NUMBER link. Simply pasting it into any browser such as Edge or Chrome will bring up the development website.
+
+```bash
+npm run dev
+```
+
+## License
+
+MIT License.
+
+Please review the [License](https://github.com/Kevew/Game-Theory-Visualizer/blob/main/LICENSE).
+
+## Contributors ✨
+
+Contributions of any kind welcome!
