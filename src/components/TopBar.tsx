@@ -1,5 +1,5 @@
 import '../css/TopBar.css'
-import { VisualizeButton } from './VisualizeButton'
+import Visualization from './Visualization'
 
 export const TopBar = () => {
     return(
@@ -9,7 +9,7 @@ export const TopBar = () => {
             </div>
 
             <div className="visualizeButtonDiv">
-                <VisualizeButton/>
+                <Visualization/>
             </div>
         </>
     )

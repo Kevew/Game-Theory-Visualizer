@@ -3,14 +3,16 @@ import '../css/Node.css'
 import NodeWindow from "./NodeWindow";
 
 interface CanvasProps {
+    // Current position given from Canvas Component
     posX: number;
     posY: number;
+    // The ID of this node
     id: string;
 }
 
 interface CanvasState {
+    // Boolean to determine whether to show it's nodeWindow or not
     enableWindow: boolean;
-    
 }
 
 
@@ -25,6 +27,7 @@ class Node extends React.Component<CanvasProps, CanvasState>{
 
     openWindow = (event: React.MouseEvent) => {
         let target = event.target as Element;
+        // If mouse is clicking node, then open or close window
         if(target.className == "nodeDiv"){
             this.setState((prevState) => ({
                 enableWindow: prevState.enableWindow ? false : true

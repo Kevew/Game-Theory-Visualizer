@@ -3,6 +3,7 @@ import { initialState, State, NodeState } from './states';
 import { increment } from './reducers/Increment';
 import { change_strategy_1 } from './reducers/Change_Strat_1';
 import { change_strategy_2 } from './reducers/Change_Strat_2';
+import { updatePoints } from './reducers/UpdatePoints';
 
 // Define the action types
 type Action =
@@ -22,7 +23,14 @@ type Action =
     type: 'CHANGE_STRATEGY_2',
     strategy: string,
     node_id: string
-  };
+  }
+  |{
+    type: 'UPDATEPOINTS',
+    strat1: string,
+    strat2: string,
+    incrementOneBy: number,
+    incrementTwoBy: number
+};
 
 // Define the reducer
 const reducer = (state: State = initialState, action: Action): State => {
@@ -35,6 +43,8 @@ const reducer = (state: State = initialState, action: Action): State => {
       return change_strategy_1(state, action);
     case 'CHANGE_STRATEGY_2':
       return change_strategy_2(state, action);
+    case 'UPDATEPOINTS':
+      return updatePoints(state, action);
     default:
       return state;
   }

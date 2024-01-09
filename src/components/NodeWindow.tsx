@@ -4,27 +4,26 @@ import { connect } from "react-redux";
 import { State } from '../store/states';
 
 interface CanvasProps {
-    id: string;
-    startingStratOne: string;
-    startingStratTwo: string;
-    dispatch: Function;
+    //ID of the node this window is attached to
+    id: string,
+    /* Information from the store */
+    // The saved strategies that it holds
+    startingStratOne: string,
+    startingStratTwo: string,
+    // The saved dilemma it holds
+    dilemma: number[][],
+    dispatch: Function,
 }
 
-interface CanvasState {
-    currentStrategy1: string,
-    currentStrategy2: string
-}
+interface CanvasState {}
 
 
 class NodeWindow extends React.Component<CanvasProps, CanvasState>{
     constructor(props: CanvasProps){
         super(props);
-        this.state = {
-            currentStrategy1: "-1",
-            currentStrategy2: "-1"
-        }
     }
 
+    // Changing strategy 1 dropdown updates store
     handleStrategyChange1 = (e: React.ChangeEvent<HTMLSelectElement>) => {
         let {value} = e.target;
         this.props.dispatch({ type: 'CHANGE_STRATEGY_1',
@@ -32,6 +31,7 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                               node_id: this.props.id});
     }
 
+    // Changing strategy 2 dropdown updates store
     handleStrategyChange2 = (e: React.ChangeEvent<HTMLSelectElement>) => {
         let {value} = e.target;
         this.props.dispatch({ type: 'CHANGE_STRATEGY_2',
@@ -57,16 +57,21 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                     <option value="Strategy 1">Strategy 1</option>
                     <option value="Strategy 2">Strategy 2</option>
                 </select>
+                <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
+                <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>
+                <input className="pointInputBar" defaultValue={this.props.dilemma[2].toString()}></input>
+                <input className="pointInputBar" defaultValue={this.props.dilemma[3].toString()}></input>
             </div>
         )
     }
 }
 
 
-
+// Get state information from store
 const mapStateToProps = (state: State, prop: any) => ({
     startingStratOne: state.nodeList[prop.id].strategyOne,
     startingStratTwo: state.nodeList[prop.id].strategyTwo,
+    dilemma: state.nodeList[prop.id].dilemma
 });
   
 // Connect the component to the store

@@ -5,3 +5,8 @@
     left: 150px;
     background-color: rebeccapurple;
 }
+
+.pointInputBar{
+    position: relative;
+    width: 40%;
+}
