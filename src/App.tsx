@@ -1,7 +1,7 @@
-import './App.css'
-import { TopBar } from './components/TopBar'
-import { StatsMenu } from './components/StatsMenu'
-import Canvas from './components/Canvas'
+import './App.css';
+import { TopBar } from './components/TopBar';
+import { StatsMenu } from './components/StatsMenu';
+import Canvas from './components/Canvas';
 
 function App() {
   

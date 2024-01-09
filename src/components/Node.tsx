@@ -10,6 +10,7 @@ interface CanvasProps {
 
 interface CanvasState {
     enableWindow: boolean;
+    
 }
 
 
@@ -23,9 +24,12 @@ class Node extends React.Component<CanvasProps, CanvasState>{
     }
 
     openWindow = (event: React.MouseEvent) => {
-        this.setState((prevState) => ({
-            enableWindow: prevState.enableWindow ? false : true
-        }));
+        let target = event.target as Element;
+        if(target.className == "nodeDiv"){
+            this.setState((prevState) => ({
+                enableWindow: prevState.enableWindow ? false : true
+            }));
+        }
     }
 
     render(){
@@ -34,7 +38,7 @@ class Node extends React.Component<CanvasProps, CanvasState>{
         }else{
             return(
                 <div id={this.props.id} onMouseDown={(e) => this.openWindow(e)} className="nodeDiv" style={{left: this.props.posX, top: this.props.posY}}>
-                    <NodeWindow/>
+                    <NodeWindow id={this.props.id}/>
                 </div>
             )
         }

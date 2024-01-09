@@ -1,6 +1,8 @@
 import React from "react";
 import '../css/Canvas.css'
 import Node from "./Node";
+import { connect } from "react-redux";
+import { State } from '../store/states';
 
 // The information that each node state will currently hold
 interface NodeState {
@@ -10,7 +12,9 @@ interface NodeState {
     posY: number;
 }  
 
-interface CanvasProps {}
+interface CanvasProps {
+    dispatch: Function;
+}
 
 interface CanvasState {
   over: boolean;
@@ -30,8 +34,6 @@ const offsetX: number = 50;
 const offsetY: number = 50;
 
 class Canvas extends React.Component<CanvasProps, CanvasState>{
-
-    nodeRef = React.createRef();
 
     constructor(props: CanvasProps){
         super(props);
@@ -59,6 +61,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         if(this.state.over){
             // Check if mouse is not over a node and if you have just moved it around
             if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0){
+                this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
                 this.setState(prevState => ({
                     listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
                                                             id: this.state.nodeID.toString(),
@@ -111,7 +114,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 overNodeIndex: nodeIndex,
                 moveState: 1
             })
-        }else{
+        }else if(target.className == "canvas"){
             this.setState({
                 mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                 mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
@@ -120,6 +123,13 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 origMouseDown: [e.clientX - target.getBoundingClientRect().left - offsetX,
                                 e.clientY - target.getBoundingClientRect().top - offsetY],
                 changeInMouse: 0
+            })
+        }else{
+            this.setState({
+                mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
+                mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
+                overNodeIndex: -2,
+                moveState: -1
             })
         }
     }
@@ -167,4 +177,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     }
 }
 
-export default Canvas;
+const mapStateToProps = (state: State) => ({});
+  
+// Connect the component to the store
+export default connect(mapStateToProps)(Canvas);
