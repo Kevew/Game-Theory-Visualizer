@@ -33,7 +33,7 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
         let strat1 = event.target[1].value;
         let player2 = event.target[2].value;
         let strat2 = event.target[3].value;
-        
+
         let input1 = JSON.parse("[" + event.target[4].value + "]");
         let input2 = JSON.parse("[" + event.target[5].value + "]");
         let input3 = JSON.parse("[" + event.target[6].value + "]");
@@ -66,32 +66,38 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
     render(){
         return(
             <div className="nodeWindowDiv">
-                <form onSubmit={(e) => this.saveChanges(e)}>
-                    <select id={"player1Of" + this.props.id} className="playerSelector" defaultValue={this.props.startingPlayerOne}>
-                        <option value="Player 1">Player 1</option>
-                        <option value="Player 2">Player 2</option>
+                <form className="formSelector" onSubmit={(e) => this.saveChanges(e)}>
+                    <select id={"player1Of" + this.props.id}
+                        className="playerSelector"
+                        defaultValue={this.props.startingPlayerOne}>
+                        <option className="option" value="Player 1">Player 1</option>
+                        <option className="option" value="Player 2">Player 2</option>
                     </select>
                     <select id={"nodeStrategy1Selector" + this.props.id}
-                                defaultValue={this.props.startingStratOne}>
-                        <option value="Empty">Empty</option>
-                        <option value="Strategy 1">Strategy 1</option>
-                        <option value="Strategy 2">Strategy 2</option>
+                            className="playerSelector"
+                            defaultValue={this.props.startingStratOne}>
+                        <option className="option" value="Empty">Empty</option>
+                        <option className="option" value="Strategy 1">Strategy 1</option>
+                        <option className="option" value="Strategy 2">Strategy 2</option>
                     </select>
-                    <select id={"player2Of" + this.props.id} className="playerSelector" defaultValue={this.props.startingPlayerTwo}>
-                        <option value="Player 1">Player 1</option>
-                        <option value="Player 2">Player 2</option>
+                    <select id={"player2Of" + this.props.id}
+                            className="playerSelector"
+                            defaultValue={this.props.startingPlayerTwo}>
+                        <option className="option" value="Player 1">Player 1</option>
+                        <option className="option" value="Player 2">Player 2</option>
                     </select>
-                    <select     id={"nodeStrategy2Selector" + this.props.id}
-                                defaultValue={this.props.startingStratTwo}>
-                        <option value="Empty">Empty</option>
-                        <option value="Strategy 1">Strategy 1</option>
-                        <option value="Strategy 2">Strategy 2</option>
+                    <select id={"nodeStrategy2Selector" + this.props.id}
+                            className="playerSelector"
+                            defaultValue={this.props.startingStratTwo}>
+                        <option className="option" value="Empty">Empty</option>
+                        <option className="option" value="Strategy 1">Strategy 1</option>
+                        <option className="option" value="Strategy 2">Strategy 2</option>
                     </select>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[2].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[3].toString()}></input>
-                    <button type='submit'>Save Changes</button>
+                    <button className="saveChanges"type='submit'>Save Changes</button>
                 </form>
             </div>
         )

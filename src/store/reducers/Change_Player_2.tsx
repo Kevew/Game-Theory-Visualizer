@@ -16,7 +16,7 @@ export const change_player_2 = (state: State = initialState, action: Action): St
 
     let temporalPlayerDict = {...state.playerList};
     let newPlayerName = action.player;
-    let oldPlayerName = state.nodeList[Number(action.node_id)].strategyTwo;
+    let oldPlayerName = state.nodeList[Number(action.node_id)].playerTwo;
 
     let temporalPointsPlayer = {...state.playerList}
     if(state.playerList[newPlayerName] === undefined){

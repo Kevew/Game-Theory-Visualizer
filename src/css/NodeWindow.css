@@ -1,17 +1,73 @@
 .nodeWindowDiv{
     position: relative;
     width: 200%;
-    height: 300%;
+    height: 250%;
     left: 150px;
-    background-color: rebeccapurple;
+    background-color: #F7F0F5;
+    border: 2px solid #000000;
 }
+
+.formSelector{
+    margin-top: 10px;
+}
+
+select {
+    appearance: none;
+    outline: 10px red;
+    border: 0;
+    box-shadow: 1px 1px;
+    padding: 0 0.5em;
+    margin: 2px;
+    color: black;
+    background-color: #DECBB7;
+    background-image: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.playerSelector {
+    background-color: #DECBB7;
+    position: relative;
+    height: 3em;
+    width: 40%;
+    display: inline;
+    overflow: hidden;
+    border: 1px solid black;
+}
+
+.playerSelector:hover {
+    background-color: #8F857D;
+}
+
+.option{
+    background-color: #DECBB7;
+}
+
 
 .pointInputBar{
+    width: 35%;
+    box-shadow: 1px 1px;
+    padding: 0 0.5em;
+    margin: 2px;
+    background-color: #e4a288;
     position: relative;
-    width: 40%;
+    height: 3em;
+    display: inline;
+    overflow: hidden;
+    border: 1px solid black;
 }
 
-.playerSelector{
-    position: relative;
-    width: 40%;
+.pointInputBar:hover {
+    background-color: #da8772;
+}
+
+
+.saveChanges{
+    margin-top: 4%;
+    background-color: #dfdfdf;
+}
+
+.saveChanges:hover{
+    margin-top: 4%;
+    background-color: #f1f1f1;
 }
