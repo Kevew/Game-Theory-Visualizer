@@ -11,13 +11,30 @@ interface CanvasProps {
     dispatch: Function;
 }
 
-interface CanvasState {}
+interface CanvasState {
+    isVisualizing: boolean,
+}
 
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 class Visualize extends React.Component<CanvasProps, CanvasState>{
 
+    constructor(props: CanvasProps){
+        super(props);
+        this.state = {
+            isVisualizing: false,
+        }
+    }
+
     // When the Visualization Button has been clicked, begin the simulatio
-    beginVisualization = () => {
+    beginVisualization = async() => {
+        // If it is already visualizing, stop visualizing
+        if(this.state.isVisualizing){
+            return;
+        }
+        this.setState({
+            isVisualizing: true
+        })
         this.props.dispatch({type: 'RESETPOINTS'});
         console.log("BEGIN VISUALIZATION");
         // Get all the starting nodes
@@ -42,6 +59,8 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
             if(!val){
                 continue;
             }
+            this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: val.id});
+            await delay(2000);
             if(val.strategyOne === "Strategy 1"){
                 if(val.strategyTwo === "Strategy 1"){
                     a = val.dilemma[0][0];
@@ -65,12 +84,16 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                                 incrementOneBy: a,
                                 incrementTwoBy: b});
         }
+        this.setState({
+            isVisualizing: false
+        })
+        this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: -1});
     }
     render(){
         return(
             <>
                 <button onClick={this.beginVisualization} className="visualizeButton">
-                    Visualize
+                    <p>Visualize</p>
                 </button>
             </>
         )

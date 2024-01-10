@@ -43,6 +43,11 @@ export interface State {
     playerList: PlayerDict;
     // The mode the user is in, 1 - Add/Edit Node, 2 - Delete Node, 3 - Connect Node
     mode: number;
+    
+
+    /* Simulation info */
+    // Where the simulation currently is at
+    currentNode: number;
 }
   
 // Define the initial state
@@ -51,5 +56,6 @@ export const initialState: State = {
     nodeList: [],
     playerList: {'Player 1': {cnt: 1, points: 0, colorAsso: '#FF0000'},
                  'Player 2': {cnt: 1, points: 0, colorAsso: '#0000FF'}} as PlayerDict,
-    mode: 1
+    mode: 1,
+    currentNode: -1,
 };

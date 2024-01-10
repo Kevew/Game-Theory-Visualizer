@@ -74,8 +74,8 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                         className="playerSelector"
                         defaultValue={this.props.startingPlayerOne}>
                         {
-                            Object.keys(this.props.storePlayer).map((node) => 
-                            <option className="option" value={node}>{node}</option>)
+                            Object.keys(this.props.storePlayer).map((node, index) => 
+                            <option key={index} className="option" value={node}>{node}</option>)
                         }
                     </select>
                     <select id={"nodeStrategy1Selector" + this.props.id}
@@ -89,8 +89,8 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                             className="playerSelector"
                             defaultValue={this.props.startingPlayerTwo}>
                         {
-                            Object.keys(this.props.storePlayer).map((node) => 
-                            <option className="option" value={node}>{node}</option>)
+                            Object.keys(this.props.storePlayer).map((node, index) => 
+                            <option key={index} className="option" value={node}>{node}</option>)
                         }
                     </select>
                     <select id={"nodeStrategy2Selector" + this.props.id}

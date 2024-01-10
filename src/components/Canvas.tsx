@@ -23,6 +23,9 @@ interface CanvasProps {
     mode: number;
     // Allows communications/dispatchs to store
     dispatch: Function;
+
+    // Current Node the simulation is at
+    curr_node: number;
 }
 
 interface CanvasState {
@@ -126,7 +129,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     onMouseDownEvent = (e: React.MouseEvent) => {
         let target = e.target as Element;
         // Check if mouse is at a node
-        if(target.className == "nodeDiv"){
+        if(target.className == "nodeDiv "){
             // If edit mode, then start moving it
             if(this.props.mode == 1){
                 const nodeIndex = this.state.listOfNode.findIndex(node => node.id === target.id);
@@ -172,7 +175,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     // When the mouse moves, this function is called
     onMouseMoveEvent = (e: React.MouseEvent) => {
         let target = e.target as Element;
-        if(target.className == "nodeDiv"){
+        if(target.className == "nodeDiv "){
             target = target.parentElement as Element;
         }
         // Move all the nodes at once
@@ -203,7 +206,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                 id={node.id}
                                 posX={node.posX}
                                 posY={node.posY}
-                                mode={this.props.mode}/>)
+                                mode={this.props.mode}
+                                curr_node={this.props.curr_node}/>)
                 }
             </div>
         )
@@ -212,7 +216,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
 // Get the information from the store
 const mapStateToProps = (state: State) => ({
-    mode: state.mode
+    mode: state.mode,
+    curr_node: state.currentNode
 });
   
 // Connect the component to the store
