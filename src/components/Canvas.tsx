@@ -16,6 +16,11 @@ interface NodeState {
 }  
 
 interface CanvasProps {
+    // Current Node Manipulation Mode
+    // 1 - Add/Edit Node
+    // 2 - Delete Node
+    // 3 - Connect Nodes
+    mode: number;
     // Allows communications/dispatchs to store
     dispatch: Function;
 }
@@ -72,7 +77,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         // Check if mouse is over canvas
         if(this.state.over){
             // Check if mouse is not over a node and if you have just moved it around
-            if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0){
+            if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0 && this.props.mode == 1){
                 // If none of the above, create a node and tell the store you created one
                 this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
                 this.setState(prevState => ({
@@ -102,7 +107,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
     // Move all the nodes around at once
     moveAll = (origX: number, origY: number, changeX: number, changeY: number) => {
-        let newList = this.state.listOfNode
+        let newList = this.state.listOfNode;
         for(let i = 0;i < newList.length;i++){
             newList[i] = {
                 ...newList[i],
@@ -120,15 +125,18 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     // This function gets called when mouse gets clicked down and only down
     onMouseDownEvent = (e: React.MouseEvent) => {
         let target = e.target as Element;
-        // Check if mouse is at a node.
+        // Check if mouse is at a node
         if(target.className == "nodeDiv"){
-            const nodeIndex = this.state.listOfNode.findIndex(node => node.id === target.id);
-            this.setState({
-                mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
-                mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
-                overNodeIndex: nodeIndex,
-                moveState: 1
-            })
+            // If edit mode, then start moving it
+            if(this.props.mode == 1){
+                const nodeIndex = this.state.listOfNode.findIndex(node => node.id === target.id);
+                this.setState({
+                    mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
+                    mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
+                    overNodeIndex: nodeIndex,
+                    moveState: 1
+                })
+            }
         // Check if mouse is over canvas
         }else if(target.className == "canvas"){
             this.setState({
@@ -191,7 +199,11 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                     onMouseMove={(e) => this.onMouseMoveEvent(e)}>
                 {
                     this.state.listOfNode.map(node => 
-                        <Node key={node.key} id={node.id} posX={node.posX} posY={node.posY}/>)
+                        <Node   key={node.key}
+                                id={node.id}
+                                posX={node.posX}
+                                posY={node.posY}
+                                mode={this.props.mode}/>)
                 }
             </div>
         )
@@ -199,7 +211,9 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 }
 
 // Get the information from the store
-const mapStateToProps = (state: State) => ({});
+const mapStateToProps = (state: State) => ({
+    mode: state.mode
+});
   
 // Connect the component to the store
 export default connect(mapStateToProps)(Canvas);

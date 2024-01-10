@@ -8,6 +8,8 @@ interface CanvasProps {
     posY: number;
     // The ID of this node
     id: string;
+    // Node Management Setting
+    mode: number;
 }
 
 interface CanvasState {
@@ -28,7 +30,8 @@ class Node extends React.Component<CanvasProps, CanvasState>{
     openWindow = (event: React.MouseEvent) => {
         let target = event.target as Element;
         // If mouse is clicking node, then open or close window
-        if(target.className == "nodeDiv"){
+        // Also checks if user is currently in edit mode
+        if(target.className == "nodeDiv" && this.props.mode == 1){
             this.setState((prevState) => ({
                 enableWindow: prevState.enableWindow ? false : true
             }));

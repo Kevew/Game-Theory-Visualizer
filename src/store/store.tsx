@@ -8,51 +8,48 @@ import { change_strat } from './reducers/Change_Strat';
 import { update_dilemma } from './reducers/Update_Dilemma';
 import { reset_points } from './reducers/Reset_Points';
 import { add_player } from './reducers/Add_Player';
+import { mode_selector } from './reducers/Mode_Selector';
 
 // Define the action types
 type Action =
   {
     type: 'INCREMENT'
     node_id: string
-  } 
-  |{
+  } |{
     type: 'DECREMENT'
-  }
-  |{
+  }|{
     type: 'CHANGE_PLAYER_1',
     player: string,
     node_id: string
-  }
-  |{
+  }|{
     type: 'CHANGE_PLAYER_2',
     player: string,
     node_id: string
-  }
-  |{
+  }|{
     type: 'UPDATEPOINTS',
     player1: string,
     player2: string,
     incrementOneBy: number,
     incrementTwoBy: number
-  }
-  |{
+  }|{
     type: 'CHANGE_STRAT',
     strat1: string,
     strat2: string,
     node_id: string
-  }
-  |{
+  }|{
     type: 'UPDATEDILEMMA',
     updatedVer: number[][],
     node_id: string
   }|
   {
   type: 'RESETPOINTS'
-  }
-  |{
+  }|{
   type: 'ADDPLAYER',
   name: string,
   color: Color
+  }|{
+  type: 'MODESELECTOR',
+  mode: number
 };
 
 // Define the reducer
@@ -76,6 +73,8 @@ const reducer = (state: State = initialState, action: Action): State => {
       return reset_points(state, action);
     case 'ADDPLAYER':
       return add_player(state, action);
+    case 'MODESELECTOR':
+      return mode_selector(state, action);
     default:
       return state;
   }
