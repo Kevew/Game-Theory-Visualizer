@@ -1,7 +1,7 @@
 import React from "react";
 import '../css/NodeWindow.css';
 import { connect } from "react-redux";
-import { State } from '../store/states';
+import { PlayerDict, State } from '../store/states';
 
 interface CanvasProps {
     //ID of the node this window is attached to
@@ -16,6 +16,9 @@ interface CanvasProps {
     // The saved dilemma it holds
     dilemma: number[][],
     dispatch: Function,
+
+    // State information
+    storePlayer: PlayerDict;
 }
 
 interface CanvasState {}
@@ -70,8 +73,10 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                     <select id={"player1Of" + this.props.id}
                         className="playerSelector"
                         defaultValue={this.props.startingPlayerOne}>
-                        <option className="option" value="Player 1">Player 1</option>
-                        <option className="option" value="Player 2">Player 2</option>
+                        {
+                            Object.keys(this.props.storePlayer).map((node) => 
+                            <option className="option" value={node}>{node}</option>)
+                        }
                     </select>
                     <select id={"nodeStrategy1Selector" + this.props.id}
                             className="playerSelector"
@@ -83,8 +88,10 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                     <select id={"player2Of" + this.props.id}
                             className="playerSelector"
                             defaultValue={this.props.startingPlayerTwo}>
-                        <option className="option" value="Player 1">Player 1</option>
-                        <option className="option" value="Player 2">Player 2</option>
+                        {
+                            Object.keys(this.props.storePlayer).map((node) => 
+                            <option className="option" value={node}>{node}</option>)
+                        }
                     </select>
                     <select id={"nodeStrategy2Selector" + this.props.id}
                             className="playerSelector"
@@ -111,7 +118,8 @@ const mapStateToProps = (state: State, prop: any) => ({
     startingPlayerTwo: state.nodeList[prop.id].playerTwo,
     startingStratOne: state.nodeList[prop.id].strategyOne,
     startingStratTwo: state.nodeList[prop.id].strategyTwo,
-    dilemma: state.nodeList[prop.id].dilemma
+    dilemma: state.nodeList[prop.id].dilemma,
+    storePlayer: state.playerList
 });
   
 // Connect the component to the store

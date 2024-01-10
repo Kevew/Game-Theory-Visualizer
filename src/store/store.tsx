@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { initialState, State, NodeState } from './states';
+import { initialState, State, Color } from './states';
 import { increment } from './reducers/Increment';
 import { change_player_1 } from './reducers/Change_Player_1';
 import { change_player_2 } from './reducers/Change_Player_2';
@@ -7,6 +7,7 @@ import { updatePoints } from './reducers/UpdatePoints';
 import { change_strat } from './reducers/Change_Strat';
 import { update_dilemma } from './reducers/Update_Dilemma';
 import { reset_points } from './reducers/Reset_Points';
+import { add_player } from './reducers/Add_Player';
 
 // Define the action types
 type Action =
@@ -44,8 +45,14 @@ type Action =
     type: 'UPDATEDILEMMA',
     updatedVer: number[][],
     node_id: string
-}|{
+  }|
+  {
   type: 'RESETPOINTS'
+  }
+  |{
+  type: 'ADDPLAYER',
+  name: string,
+  color: Color
 };
 
 // Define the reducer
@@ -67,6 +74,8 @@ const reducer = (state: State = initialState, action: Action): State => {
       return update_dilemma(state, action);
     case 'RESETPOINTS':
       return reset_points(state, action);
+    case 'ADDPLAYER':
+      return add_player(state, action);
     default:
       return state;
   }
