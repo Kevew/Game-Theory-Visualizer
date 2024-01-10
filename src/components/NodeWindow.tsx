@@ -1,4 +1,4 @@
-import React, { ReactEventHandler } from "react";
+import React from "react";
 import '../css/NodeWindow.css';
 import { connect } from "react-redux";
 import { State } from '../store/states';
@@ -10,6 +10,9 @@ interface CanvasProps {
     // The saved strategies that it holds
     startingStratOne: string,
     startingStratTwo: string,
+    // The saved players
+    startingPlayerOne: string,
+    startingPlayerTwo: string,
     // The saved dilemma it holds
     dilemma: number[][],
     dispatch: Function,
@@ -23,19 +26,39 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
         super(props);
     }
 
-    // Changing strategy 1 dropdown updates store
-    handleStrategyChange1 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        let {value} = e.target;
-        this.props.dispatch({ type: 'CHANGE_STRATEGY_1',
-                              strategy: value,
-                              node_id: this.props.id});
-    }
+    // Save changes for node
+    saveChanges = (event: any) => {
+        event.preventDefault();
+        let player1 = event.target[0].value;
+        let strat1 = event.target[1].value;
+        let player2 = event.target[2].value;
+        let strat2 = event.target[3].value;
+        
+        let input1 = JSON.parse("[" + event.target[4].value + "]");
+        let input2 = JSON.parse("[" + event.target[5].value + "]");
+        let input3 = JSON.parse("[" + event.target[6].value + "]");
+        let input4 = JSON.parse("[" + event.target[7].value + "]");
+        // Updates Player 1 if it changed
+        if(player1 !== this.props.startingPlayerOne){
+            this.props.dispatch({ type: 'CHANGE_PLAYER_1',
+                                  player: player1,
+                                  node_id: this.props.id});
+        }
 
-    // Changing strategy 2 dropdown updates store
-    handleStrategyChange2 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        let {value} = e.target;
-        this.props.dispatch({ type: 'CHANGE_STRATEGY_2',
-                              strategy: value,
+        // Updates Player 2 if it changed
+        if(player2 !== this.props.startingPlayerTwo){
+            this.props.dispatch({ type: 'CHANGE_PLAYER_2',
+                                  player: player2,
+                                  node_id: this.props.id});
+        }
+        // Change the strats based on new strat values
+        this.props.dispatch({ type: 'CHANGE_STRAT',
+                              strat1: strat1,
+                              strat2: strat2,
+                              node_id: this.props.id});
+        // Change the strats based on the new dilemma
+        this.props.dispatch({ type: 'UPDATEDILEMMA',
+                              updatedVer: [input1, input2, input3, input4],
                               node_id: this.props.id});
     }
     
@@ -43,24 +66,33 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
     render(){
         return(
             <div className="nodeWindowDiv">
-                <select     onChange={this.handleStrategyChange1}
-                            id={"nodeStrategy1Selector" + this.props.id}
-                            value={this.props.startingStratOne}>
-                    <option value="Empty">Empty</option>
-                    <option value="Strategy 1">Strategy 1</option>
-                    <option value="Strategy 2">Strategy 2</option>
-                </select>
-                <select     onChange={this.handleStrategyChange2}
-                            id={"nodeStrategy2Selector" + this.props.id}
-                            value={this.props.startingStratTwo}>
-                    <option value="Empty">Empty</option>
-                    <option value="Strategy 1">Strategy 1</option>
-                    <option value="Strategy 2">Strategy 2</option>
-                </select>
-                <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
-                <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>
-                <input className="pointInputBar" defaultValue={this.props.dilemma[2].toString()}></input>
-                <input className="pointInputBar" defaultValue={this.props.dilemma[3].toString()}></input>
+                <form onSubmit={(e) => this.saveChanges(e)}>
+                    <select id={"player1Of" + this.props.id} className="playerSelector" defaultValue={this.props.startingPlayerOne}>
+                        <option value="Player 1">Player 1</option>
+                        <option value="Player 2">Player 2</option>
+                    </select>
+                    <select id={"nodeStrategy1Selector" + this.props.id}
+                                defaultValue={this.props.startingStratOne}>
+                        <option value="Empty">Empty</option>
+                        <option value="Strategy 1">Strategy 1</option>
+                        <option value="Strategy 2">Strategy 2</option>
+                    </select>
+                    <select id={"player2Of" + this.props.id} className="playerSelector" defaultValue={this.props.startingPlayerTwo}>
+                        <option value="Player 1">Player 1</option>
+                        <option value="Player 2">Player 2</option>
+                    </select>
+                    <select     id={"nodeStrategy2Selector" + this.props.id}
+                                defaultValue={this.props.startingStratTwo}>
+                        <option value="Empty">Empty</option>
+                        <option value="Strategy 1">Strategy 1</option>
+                        <option value="Strategy 2">Strategy 2</option>
+                    </select>
+                    <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
+                    <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>
+                    <input className="pointInputBar" defaultValue={this.props.dilemma[2].toString()}></input>
+                    <input className="pointInputBar" defaultValue={this.props.dilemma[3].toString()}></input>
+                    <button type='submit'>Save Changes</button>
+                </form>
             </div>
         )
     }
@@ -69,6 +101,8 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
 
 // Get state information from store
 const mapStateToProps = (state: State, prop: any) => ({
+    startingPlayerOne: state.nodeList[prop.id].playerOne,
+    startingPlayerTwo: state.nodeList[prop.id].playerTwo,
     startingStratOne: state.nodeList[prop.id].strategyOne,
     startingStratTwo: state.nodeList[prop.id].strategyTwo,
     dilemma: state.nodeList[prop.id].dilemma

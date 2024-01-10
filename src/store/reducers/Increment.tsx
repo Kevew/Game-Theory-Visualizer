@@ -10,17 +10,21 @@ export const increment = (state: State = initialState, action: Action): State =>
     let newNode: NodeState = {
         id: Number(action.node_id),
         connect_to: [],
+        playerOne: "Player 1",
+        playerTwo: "Player 2",
         strategyOne: 'Empty',
         strategyTwo: 'Empty',
         dilemma: [[2, 2], [0, 4], [4, 0], [1, 1]]
       };
-      if(state.strategyList['Empty'] === undefined){
-        return { ...state, count: state.count + 1,
-                nodeList: [...state.nodeList, newNode],
-                strategyList: {...state.strategyList, 'Empty': 2}};
-      }else{
-        return { ...state, count: state.count + 1,
-                nodeList: [...state.nodeList, newNode],
-                strategyList: {...state.strategyList, 'Empty': state.strategyList['Empty'] + 2}}
-      };
+    if(state.playerList['Player 1'] === undefined){
+      return { ...state, count: state.count + 1,
+               nodeList: [...state.nodeList, newNode],
+               playerList: {...state.playerList, 'Player 1': 1, 'Player 2': 1},
+               pointsPerPlayer: {...state.pointsPerPlayer, 'Player 1': 0, 'Player 2': 0}};
+    }else{
+      return { ...state, count: state.count + 1,
+               nodeList: [...state.nodeList, newNode],
+               playerList: {...state.playerList, 'Player 1': state.playerList['Player 1'] + 1, 
+                                                 'Player 2': state.playerList['Player 2'] + 1}}
+    };
 }

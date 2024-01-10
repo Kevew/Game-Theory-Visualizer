@@ -1,12 +1,17 @@
 .nodeWindowDiv{
     position: relative;
-    width: 150%;
+    width: 200%;
     height: 300%;
     left: 150px;
     background-color: rebeccapurple;
 }
 
 .pointInputBar{
+    position: relative;
+    width: 40%;
+}
+
+.playerSelector{
     position: relative;
     width: 40%;
 }

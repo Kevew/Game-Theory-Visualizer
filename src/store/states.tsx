@@ -4,9 +4,13 @@ export interface NodeState{
     id: number;
     // Which nodes the current node is connected to
     connect_to: number[];
-    // The first strategy of the node
+    // Player 1 of the node
+    playerOne: string;
+    // Player 2 of the node
+    playerTwo: string;
+    // The strategy player 1 uses
     strategyOne: string;
-    // The second strategy of the node
+    // The strategy player 2 uses
     strategyTwo: string;
     // The prisoner's dilema of this specfic node
     // First element is if both cooperates
@@ -26,15 +30,15 @@ export interface State {
     // The nodes stored
     nodeList: NodeState[];
     // Every Unique Strategy that exists, this is to keep track if there exists a node that holds the strategy
-    strategyList: StrategyDict;
+    playerList: StrategyDict;
     // The points each strategy has during the simulation
-    pointsPerStrat: StrategyDict;
+    pointsPerPlayer: StrategyDict;
 }
   
 // Define the initial state
 export const initialState: State = {
     count: 0,
     nodeList: [],
-    strategyList: {} as StrategyDict,
-    pointsPerStrat: {} as StrategyDict
+    playerList: {} as StrategyDict,
+    pointsPerPlayer: {} as StrategyDict
 };

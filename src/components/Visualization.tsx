@@ -17,7 +17,8 @@ interface CanvasState {}
 class Visualize extends React.Component<CanvasProps, CanvasState>{
 
     // When the Visualization Button has been clicked, begin the simulatio
-    beginVisualization = () =>{
+    beginVisualization = () => {
+        this.props.dispatch({type: 'RESETPOINTS'});
         console.log("BEGIN VISUALIZATION");
         // Get all the starting nodes
         let length = this.props.nodeState.length;
@@ -59,8 +60,8 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                 }
             }
             this.props.dispatch({type: 'UPDATEPOINTS', 
-                                strat1: val.strategyOne,
-                                strat2: val.strategyTwo,
+                                player1: val.playerOne,
+                                player2: val.playerTwo,
                                 incrementOneBy: a,
                                 incrementTwoBy: b});
         }
