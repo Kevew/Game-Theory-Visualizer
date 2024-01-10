@@ -5,4 +5,16 @@
     width: 100px;
     height: 100px;
     z-index: 100;
+    border: 2px solid black;
 }
+
+.nodeDiv:after {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 2px;
+    background: black;
+    content: "";
+    width: 100%;
+    display: block;
+  }

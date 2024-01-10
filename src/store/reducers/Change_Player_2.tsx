@@ -14,25 +14,9 @@ export const change_player_2 = (state: State = initialState, action: Action): St
         playerTwo: action.player
     };
 
-    let temporalPlayerDict = {...state.playerList};
-    let newPlayerName = action.player;
+    let temporalPlayerList = {...state.playerList};
     let oldPlayerName = state.nodeList[Number(action.node_id)].playerTwo;
-
-    let temporalPointsPlayer = {...state.playerList}
-    if(state.playerList[newPlayerName] === undefined){
-        temporalPlayerDict = {...temporalPlayerDict, 
-                                [newPlayerName]: 1,
-                                [oldPlayerName]: state.playerList[oldPlayerName] - 1}
-        temporalPointsPlayer = {...temporalPointsPlayer,
-                                [newPlayerName]: 0}
-    }else{
-        temporalPlayerDict = {...temporalPlayerDict, 
-                                [newPlayerName]: state.playerList[newPlayerName] + 1,
-                                [oldPlayerName]: state.playerList[oldPlayerName] - 1}
-    }
-    if(temporalPlayerDict[oldPlayerName] == 0){
-        delete temporalPlayerDict[oldPlayerName];
-        delete temporalPointsPlayer[oldPlayerName];
-    }
-    return {...state, nodeList: updatedNodeList2, playerList: temporalPlayerDict, pointsPerPlayer: temporalPointsPlayer};
+    temporalPlayerList[action.player].cnt += 1;
+    temporalPlayerList[oldPlayerName].cnt -= 1;
+    return {...state, nodeList: updatedNodeList2, playerList: temporalPlayerList};
 }

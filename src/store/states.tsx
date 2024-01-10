@@ -1,3 +1,9 @@
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+type Color = RGB | RGBA | HEX;
+
 // The information each node holds 
 export interface NodeState{
     // The id of the node
@@ -19,8 +25,12 @@ export interface NodeState{
     // Fourth is if both defect
     dilemma: number[][];
 }
-export interface StrategyDict {
-    [key: string]: number;
+export interface PlayerDict {
+    [key: string]: {
+        cnt: number,
+        points: number,
+        colorAsso: Color
+    };
 }
   
 // Define the state type
@@ -29,16 +39,14 @@ export interface State {
     count: number;
     // The nodes stored
     nodeList: NodeState[];
-    // Every Unique Strategy that exists, this is to keep track if there exists a node that holds the strategy
-    playerList: StrategyDict;
-    // The points each strategy has during the simulation
-    pointsPerPlayer: StrategyDict;
+    // Information each player holds
+    playerList: PlayerDict;
 }
   
 // Define the initial state
 export const initialState: State = {
     count: 0,
     nodeList: [],
-    playerList: {} as StrategyDict,
-    pointsPerPlayer: {} as StrategyDict
+    playerList: {'Player 1': {cnt: 1, points: 0, colorAsso: '#FF0000'},
+                 'Player 2': {cnt: 1, points: 0, colorAsso: '#0000FF'}} as PlayerDict
 };

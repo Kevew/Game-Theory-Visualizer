@@ -10,8 +10,8 @@ type Action = {
 
 // Update the current scoreboard
 export const updatePoints = (state: State = initialState, action: Action): State => {
-    let pointDict = state.pointsPerPlayer;
-    pointDict[action.player1] += action.incrementOneBy;
-    pointDict[action.player2] += action.incrementTwoBy;
-    return {...state, pointsPerPlayer: pointDict};
+    let pointDict = state.playerList;
+    pointDict[action.player1].points += action.incrementOneBy;
+    pointDict[action.player2].points += action.incrementTwoBy;
+    return {...state, playerList: pointDict};
 }
