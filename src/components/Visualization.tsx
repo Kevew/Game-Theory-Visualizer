@@ -93,7 +93,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
         return(
             <>
                 <button onClick={this.beginVisualization} className="visualizeButton">
-                    <p>Visualize</p>
+                    Visualize
                 </button>
             </>
         )

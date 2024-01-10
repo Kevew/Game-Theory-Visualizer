@@ -7,11 +7,10 @@ export const TopBar = () => {
         <>
             <div className="controlPanelDiv">
                 <ControlPanel />
-            </div>
-
-            <div className="visualizeButtonDiv">
                 <Visualization />
             </div>
+
+
         </>
     )
 }
