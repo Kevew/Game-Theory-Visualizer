@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/VisualizeButton.css';
 import { connect } from 'react-redux';
 import { NodeState, State } from '../store/states';
 

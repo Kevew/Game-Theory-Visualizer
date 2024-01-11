@@ -1,0 +1,29 @@
+.statsMenuDiv {
+    background-color: #1A1A1B;
+    border-color: #1A1A1B;
+}
+
+.statsHeader {
+    color: #37AA9C;
+}
+
+.nodeCount {
+    color: #37AA9C;
+    font-size: medium;
+}
+
+.addPlayerButton {
+    background-color: #94F3E4;
+}
+
+.nameTextbox {
+    margin: 5%;
+}
+
+.colorTextbox {
+    margin: 5%;
+}
+
+.pointTrack {
+    color: #37AA9C;
+}
