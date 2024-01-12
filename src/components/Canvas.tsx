@@ -50,6 +50,9 @@ interface CanvasState {
     changeInMouse: number;
 }
 
+
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 // Offset for node placement
 const offsetX: number = 50;
 const offsetY: number = 50;
@@ -97,15 +100,16 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
     // Move a specific node around
     moveSelectedNode = (nodeIndex: number, xMove: number, yMove: number) => {
-        this.setState({
+        this.setState(prevstate => ({
             listOfNode: [...this.state.listOfNode.slice(0, nodeIndex), 
                         {
                             ...this.state.listOfNode[nodeIndex],
                             posX: xMove,
                             posY: yMove,
                         },
-                        ...this.state.listOfNode.slice(nodeIndex + 1)]
-        });
+                        ...this.state.listOfNode.slice(nodeIndex + 1)],
+            changeInMouse: prevstate.changeInMouse + 0.01
+        }));
     }
 
     // Move all the nodes around at once
@@ -137,7 +141,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                     mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                     mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
                     overNodeIndex: nodeIndex,
-                    moveState: 1
+                    moveState: 1,
+                    changeInMouse: 0
                 })
                 // Check if props
             }else if(this.props.mode == 2){
@@ -175,7 +180,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     }
 
     // When the mouse click is finally lifted up
-    onMouseUpEvent = (e: React.MouseEvent) => {
+    onMouseUpEvent = async(e: React.MouseEvent) => {
         let target = e.target as Element;
         this.setState({
             mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
@@ -219,6 +224,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                 posX={node.posX}
                                 posY={node.posY}
                                 mode={this.props.mode}
+                                changedSince={this.state.changeInMouse}
                                 curr_node={this.props.curr_node}/>)
                 }
             </div>
