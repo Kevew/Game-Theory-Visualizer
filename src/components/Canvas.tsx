@@ -139,6 +139,18 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                     overNodeIndex: nodeIndex,
                     moveState: 1
                 })
+                // Check if props
+            }else if(this.props.mode == 2){
+                const nodeID = this.state.listOfNode.find(node => node.id === target.id)?.id;
+                this.props.dispatch({
+                    type: "DELETENODE",
+                    node_id: nodeID
+                });
+                let newNodeList = this.state.listOfNode;
+                newNodeList.splice(newNodeList.findIndex(node => node.id === target.id), 1);
+                this.setState({
+                    listOfNode: newNodeList
+                })
             }
         // Check if mouse is over canvas
         }else if(target.className == "canvas"){
@@ -201,7 +213,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                     onMouseUp={(e) => this.onMouseUpEvent(e)}
                                     onMouseMove={(e) => this.onMouseMoveEvent(e)}>
                 {
-                    this.state.listOfNode.map(node => 
+                    this.state.listOfNode.map(node => (node.id === "-500") ? <></>:
                         <Node   key={node.key}
                                 id={node.id}
                                 posX={node.posX}

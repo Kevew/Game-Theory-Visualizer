@@ -20,6 +20,6 @@ export const increment = (state: State = initialState, action: Action): State =>
     newPlayerList[Object.keys(state.playerList)[0]].cnt += 1;
     newPlayerList[Object.keys(state.playerList)[1]].cnt += 1;
     return { ...state, count: state.count + 1,
-              nodeList: [...state.nodeList, newNode],
+              nodeDict: {...state.nodeDict, [action.node_id]: newNode},
               playerList: newPlayerList}
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { NodeState, State } from '../store/states';
+import { NodeDict, State, NodeState } from '../store/states';
 
 
 interface CanvasProps {
     // NodeState from the store
-    nodeState: NodeState[];
+    nodeState: NodeDict;
     // Allows communications/dispatchs to store
     dispatch: Function;
 }
@@ -37,13 +37,12 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
         this.props.dispatch({type: 'RESETPOINTS'});
         console.log("BEGIN VISUALIZATION");
         // Get all the starting nodes
-        let length = this.props.nodeState.length;
-        let queue = [];
-        for(let i = 0;i < length;i++){
-            if(this.props.nodeState[i].strategyOne != "Empty" && this.props.nodeState[i].strategyTwo != "Empty"){
-                queue.push(this.props.nodeState[i]);
+        let queue: NodeState[] = [];
+        Object.values(this.props.nodeState).forEach(function(value) {
+            if(value.strategyOne != "Empty" && value.strategyTwo != "Empty"){
+                queue.push(value);
             }
-        }
+        });          
 
         let a = 0;
         let b = 0;
@@ -87,6 +86,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
             isVisualizing: false
         })
         this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: -1});
+        console.log("END VISUALIZATION");
     }
     render(){
         return(
@@ -100,7 +100,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
 }
 
 const mapStateToProps = (state: State) => ({
-    nodeState: state.nodeList
+    nodeState: state.nodeDict
 });
 
 export default connect(mapStateToProps)(Visualize);

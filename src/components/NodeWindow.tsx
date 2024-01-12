@@ -114,11 +114,11 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
 
 // Get state information from store
 const mapStateToProps = (state: State, prop: any) => ({
-    startingPlayerOne: state.nodeList[prop.id].playerOne,
-    startingPlayerTwo: state.nodeList[prop.id].playerTwo,
-    startingStratOne: state.nodeList[prop.id].strategyOne,
-    startingStratTwo: state.nodeList[prop.id].strategyTwo,
-    dilemma: state.nodeList[prop.id].dilemma,
+    startingPlayerOne: Object.hasOwn(state.nodeDict, prop.id) ? state.nodeDict[prop.id].playerOne : "",
+    startingPlayerTwo: Object.hasOwn(state.nodeDict, prop.id) ? state.nodeDict[prop.id].playerTwo : "",
+    startingStratOne: Object.hasOwn(state.nodeDict, prop.id) ? state.nodeDict[prop.id].strategyOne : "",
+    startingStratTwo: Object.hasOwn(state.nodeDict, prop.id) ? state.nodeDict[prop.id].strategyTwo : "",
+    dilemma: Object.hasOwn(state.nodeDict, prop.id) ? state.nodeDict[prop.id].dilemma : [[]],
     storePlayer: state.playerList
 });
   

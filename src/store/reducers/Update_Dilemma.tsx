@@ -1,4 +1,4 @@
-import { initialState, State } from '../states';
+import { initialState, NodeDict, State } from '../states';
 
 type Action = {
     type: 'UPDATEDILEMMA',
@@ -8,10 +8,7 @@ type Action = {
 
 // Update the dilemma of a node
 export const update_dilemma = (state: State = initialState, action: Action): State => {
-    return {...state, nodeList: [...state.nodeList.slice(0, Number(action.node_id)),
-                                {
-                                    ...state.nodeList[Number(action.node_id)],
-                                    dilemma: action.updatedVer,
-                                },
-                                ...state.nodeList.slice(Number(action.node_id) + 1)]};
+    return {...state, nodeDict: {...state.nodeDict, [action.node_id]: {
+                                                    ...state.nodeDict[action.node_id], 
+                                                    dilemma: action.updatedVer}}};
 }

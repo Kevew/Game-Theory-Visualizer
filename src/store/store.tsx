@@ -10,6 +10,7 @@ import { reset_points } from './reducers/Reset_Points';
 import { add_player } from './reducers/Add_Player';
 import { mode_selector } from './reducers/Mode_Selector';
 import { set_current_sim_node } from './reducers/Set_Current_Sim_Node';
+import { delete_node } from './reducers/Delete_Node';
 
 // Define the action types
 type Action =
@@ -51,8 +52,11 @@ type Action =
   }|{
   type: 'MODESELECTOR',
   mode: number
-}|{
+  }|{
   type: 'SIMULATIONNODESELECTOR',
+  node_id: number
+}|{
+  type: 'DELETENODE',
   node_id: number
 };
 
@@ -81,6 +85,8 @@ const reducer = (state: State = initialState, action: Action): State => {
       return mode_selector(state, action);
     case 'SIMULATIONNODESELECTOR':
       return set_current_sim_node(state, action);
+    case 'DELETENODE':
+      return delete_node(state, action);
     default:
       return state;
   }

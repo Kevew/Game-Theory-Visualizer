@@ -11,5 +11,5 @@ type Action = {
 export const add_player = (state: State = initialState, action: Action): State => {
     let actionList = state.playerList;
     actionList[action.name] = {cnt: 0, points: 0, colorAsso: action.color};
-    return {...state};
+    return {...state, playerList: actionList};
 }
