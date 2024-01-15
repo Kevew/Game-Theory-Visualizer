@@ -27,3 +27,15 @@
 .pointTrack {
     color: #37AA9C;
 }
+
+.smallPlayerBox{
+    width: 20%;
+    height: 50px;
+    margin-top: 10px;
+    float: left;
+}
+
+.playerPointDiv{
+    width: 80%;
+    float: right;
+}

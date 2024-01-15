@@ -1,11 +1,9 @@
 .nodeDiv{
     position: absolute;
-    background: lightblue;
     border-radius: 50%;
     width: 100px;
     height: 100px;
-    z-index: 100;
-    border: 2px solid black;
+    z-index: 10;
 }
 
 .nodeDiv:after {
@@ -30,4 +28,25 @@
     50% {
       transform: translateY(-20px);
     }
+}
+
+.topHalfCircle{
+  position: absolute;
+  width: 100px;
+  height: 50px; /* as the half of the width */
+  border-top-left-radius: 110px;  /* 100px of height + 10px of border */
+  border-top-right-radius: 110px; /* 100px of height + 10px of border */
+  border: 2px solid black;
+  border-bottom: 0;
+  z-index: 20;
+}
+
+.bottemHalfCircle{
+  position: absolute;
+  width: 100px;
+  height: 50px; /* as the half of the width */
+  border-bottom-left-radius: 110px;  /* 100px of height + 10px of border */
+  border-bottom-right-radius: 110px; /* 100px of height + 10px of border */
+  border: 2px solid black;
+  z-index: 20;
 }

@@ -50,9 +50,6 @@ interface CanvasState {
     changeInMouse: number;
 }
 
-
-const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-
 // Offset for node placement
 const offsetX: number = 50;
 const offsetY: number = 50;
@@ -133,10 +130,11 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     onMouseDownEvent = (e: React.MouseEvent) => {
         let target = e.target as Element;
         // Check if mouse is at a node
-        if(target.className == "nodeDiv "){
+        if(target.className == "bottemHalfCircle" || target.className == "topHalfCircle"){
             // If edit mode, then start moving it
+            let targetID = target.parentElement ? target.parentElement.id : undefined;
             if(this.props.mode == 1){
-                const nodeIndex = this.state.listOfNode.findIndex(node => node.id === target.id);
+                const nodeIndex = this.state.listOfNode.findIndex(node => node.id === targetID);
                 this.setState({
                     mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                     mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
@@ -146,13 +144,13 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 })
                 // Check if props
             }else if(this.props.mode == 2){
-                const nodeID = this.state.listOfNode.find(node => node.id === target.id)?.id;
+                const nodeID = this.state.listOfNode.find(node => node.id === targetID)?.id;
                 this.props.dispatch({
                     type: "DELETENODE",
                     node_id: nodeID
                 });
                 let newNodeList = this.state.listOfNode;
-                newNodeList.splice(newNodeList.findIndex(node => node.id === target.id), 1);
+                newNodeList.splice(newNodeList.findIndex(node => node.id === targetID), 1);
                 this.setState({
                     listOfNode: newNodeList
                 })
@@ -192,8 +190,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     // When the mouse moves, this function is called
     onMouseMoveEvent = (e: React.MouseEvent) => {
         let target = e.target as Element;
-        if(target.className == "nodeDiv "){
-            target = target.parentElement as Element;
+        if(target.className == "bottemHalfCircle" || target.className == "topHalfCircle"){
+            target = (target.parentElement as Element).parentElement as Element;
         }
         // Move all the nodes at once
         if(this.state.moveState == 2){

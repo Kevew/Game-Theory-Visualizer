@@ -9,8 +9,6 @@ export const TopBar = () => {
                 <ControlPanel />
                 <Visualization />
             </div>
-
-
         </>
     )
 }

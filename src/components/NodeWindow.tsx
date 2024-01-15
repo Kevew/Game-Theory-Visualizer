@@ -65,7 +65,6 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                               node_id: this.props.id});
     }
     
-
     render(){
         return(
             <div className="nodeWindowDiv">
