@@ -91,7 +91,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
     render(){
         return(
             <>
-                <button onClick={this.beginVisualization} className="visualizeButton">
+                <button data-test="visualizeButton" onClick={this.beginVisualization} className="visualizeButton">
                     Visualize
                 </button>
             </>

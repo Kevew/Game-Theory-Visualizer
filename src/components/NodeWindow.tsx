@@ -70,40 +70,44 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
             <div className="nodeWindowDiv">
                 <form className="formSelector" onSubmit={(e) => this.saveChanges(e)}>
                     <select id={"player1Of" + this.props.id}
-                        className="playerSelector"
-                        defaultValue={this.props.startingPlayerOne}>
-                        {
-                            Object.keys(this.props.storePlayer).map((node, index) => 
-                            <option key={index} className="option" value={node}>{node}</option>)
-                        }
+                            className="playerSelector"
+                            defaultValue={this.props.startingPlayerOne}
+                            data-test={"player1Of" + this.props.id}>
+                            {
+                                Object.keys(this.props.storePlayer).map((node, index) => 
+                                <option key={index} className="option" value={node}>{node}</option>)
+                            }
                     </select>
                     <select id={"nodeStrategy1Selector" + this.props.id}
                             className="playerSelector"
-                            defaultValue={this.props.startingStratOne}>
+                            defaultValue={this.props.startingStratOne}
+                            data-test={"nodeStrategy1Selector" + this.props.id}>
                         <option className="option" value="Empty">Empty</option>
                         <option className="option" value="Strategy 1">Strategy 1</option>
                         <option className="option" value="Strategy 2">Strategy 2</option>
                     </select>
                     <select id={"player2Of" + this.props.id}
                             className="playerSelector"
-                            defaultValue={this.props.startingPlayerTwo}>
-                        {
-                            Object.keys(this.props.storePlayer).map((node, index) => 
-                            <option key={index} className="option" value={node}>{node}</option>)
-                        }
+                            defaultValue={this.props.startingPlayerTwo}
+                            data-test={"player2Of" + this.props.id}>
+                            {
+                                Object.keys(this.props.storePlayer).map((node, index) => 
+                                <option key={index} className="option" value={node}>{node}</option>)
+                            }
                     </select>
                     <select id={"nodeStrategy2Selector" + this.props.id}
                             className="playerSelector"
-                            defaultValue={this.props.startingStratTwo}>
-                        <option className="option" value="Empty">Empty</option>
-                        <option className="option" value="Strategy 1">Strategy 1</option>
-                        <option className="option" value="Strategy 2">Strategy 2</option>
+                            defaultValue={this.props.startingStratTwo}
+                            data-test={"nodeStrategy2Selector" + this.props.id}>
+                            <option className="option" value="Empty">Empty</option>
+                            <option className="option" value="Strategy 1">Strategy 1</option>
+                            <option className="option" value="Strategy 2">Strategy 2</option>
                     </select>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[2].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[3].toString()}></input>
-                    <button className="saveChanges"type='submit'>Save Changes</button>
+                    <button className="saveChanges" type='submit' data-test={"saveChanges" + this.props.id}>Save Changes</button>
                 </form>
             </div>
         )

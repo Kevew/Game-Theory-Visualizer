@@ -42,9 +42,10 @@ class Node extends React.Component<CanvasProps, CanvasState>{
         let target = event.target as Element;
         // If mouse is clicking node, then open or close window
         // Also checks if user is currently in edit mode
+        console.log(this.props.changedSince)
         if((target.className == "bottemHalfCircle" || target.className == "topHalfCircle") && 
                                                         this.props.mode == 1 && 
-                                                        this.props.changedSince <= 0){
+                                                        this.props.changedSince <= 0.02){
             this.setState((prevState) => ({
                 enableWindow: prevState.enableWindow ? false : true
             }));
@@ -54,14 +55,14 @@ class Node extends React.Component<CanvasProps, CanvasState>{
     render(){
         if(!this.state.enableWindow){
             return(
-                <div id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
+                <div data-test="node" id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
                     <NodeColor pos={true} color={this.props.topPlayerColour}/>
                     <NodeColor pos={false} color={this.props.bottemPlayerColour}/>
                 </div>
             )
         }else{
             return(
-                <div id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
+                <div data-test="node" id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
                     <NodeColor pos={true} color={this.props.topPlayerColour}/>
                     <NodeWindow id={this.props.id}/>
                     <NodeColor pos={false} color={this.props.bottemPlayerColour}/>

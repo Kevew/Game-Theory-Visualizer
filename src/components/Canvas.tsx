@@ -58,7 +58,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     constructor(props: CanvasProps){
         super(props);
         this.state = {
-            over: false,
+            over: true,
             listOfNode: [],
             nodeID: 0,
             mouseX: 0,
@@ -67,31 +67,6 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             moveState: -1,
             origMouseDown: [0, 0],
             changeInMouse: 0
-        }
-    }
-
-    // Check for mouseclick event anywhere
-    componentDidMount(){
-        window.addEventListener("click", this.mouseClick)
-    }
-
-    // What to do when mouse is clicked
-    mouseClick = () => {
-        // Check if mouse is over canvas
-        if(this.state.over){
-            // Check if mouse is not over a node and if you have just moved it around
-            if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0 && this.props.mode == 1){
-                // If none of the above, create a node and tell the store you created one
-                this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
-                this.setState(prevState => ({
-                    listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
-                                                            id: this.state.nodeID.toString(),
-                                                            posX: this.state.mouseX,
-                                                            posY: this.state.mouseY}],
-                    nodeID: prevState.nodeID + 1,
-                    overNodeIndex: prevState.nodeID
-                }));
-            }
         }
     }
 
@@ -180,11 +155,26 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     // When the mouse click is finally lifted up
     onMouseUpEvent = async(e: React.MouseEvent) => {
         let target = e.target as Element;
-        this.setState({
+        await this.setState({
             mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
             mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
             moveState: -1
         })
+        if(this.state.over){
+            // Check if mouse is not over a node and if you have just moved it around
+            if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0 && this.props.mode == 1){
+                // If none of the above, create a node and tell the store you created one
+                this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
+                this.setState(prevState => ({
+                    listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
+                                                            id: this.state.nodeID.toString(),
+                                                            posX: this.state.mouseX,
+                                                            posY: this.state.mouseY}],
+                    nodeID: prevState.nodeID + 1,
+                    overNodeIndex: prevState.nodeID
+                }));
+            }
+        }
     }
 
     // When the mouse moves, this function is called
@@ -210,7 +200,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
     render(){
         return(
-            <div className="canvas" onMouseEnter={() => this.setState({over: true})} 
+            <div data-test="canvas" className="canvas" onMouseEnter={() => this.setState({over: true})} 
                                     onMouseLeave={() => this.setState({over: false})}
                                     onMouseDown={(e) => this.onMouseDownEvent(e)}
                                     onMouseUp={(e) => this.onMouseUpEvent(e)}

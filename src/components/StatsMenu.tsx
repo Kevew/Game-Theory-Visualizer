@@ -17,9 +17,9 @@ export const StatsMenu = () => {
     
     return(
         <div> 
-            <h3 className="nodeCount">Current Amount of Nodes: {store.count}</h3>
+            <h3 data-test="nodeCount" className="nodeCount">Current Amount of Nodes: {store.count}</h3>
             <h3 className="statsHeader">Player | Points</h3>
-            <button className="addPlayerButton" onClick={() => dispatch({type: 'ADDPLAYER', name: inputName, color: inputColor})}>Add Player</button>
+            <button data-test="addPlayer" className="addPlayerButton" onClick={() => dispatch({type: 'ADDPLAYER', name: inputName, color: inputColor})}>Add Player</button>
             <input className="nameTextbox" type="text" onInput={(e) => setName((e.target as HTMLInputElement).value)} defaultValue={inputName} />
             <input className="colorTextbox" type="text" onInput={(e) => setColor((e.target as HTMLInputElement).value)} defaultValue={inputColor} />
             <div className="playerListDiv">
