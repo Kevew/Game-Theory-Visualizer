@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NodeDict, State, NodeState } from '../store/states';
 
-
 interface CanvasProps {
     // NodeState from the store
     nodeState: NodeDict;
@@ -12,6 +11,7 @@ interface CanvasProps {
 
 interface CanvasState {
     isVisualizing: boolean,
+    notificationAnimationPos: number[],
 }
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -22,6 +22,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
         super(props);
         this.state = {
             isVisualizing: false,
+            notificationAnimationPos: [],
         }
     }
 
@@ -46,10 +47,6 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
 
         let a = 0;
         let b = 0;
-        
-        //Pretend Strategy 1 is always cooperate
-        //Pretend Strategy 2 is always defect
-
 
         //Go through all the starting nodes and determine who wins
         while(queue.length){
@@ -57,10 +54,8 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
             if(!val){
                 continue;
             }
-            this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: val.id});
-            await delay(2000);
-            if(val.strategyOne === "Strategy 1"){
-                if(val.strategyTwo === "Strategy 1"){
+            if(val.strategyOne === "Always Cooperate"){
+                if(val.strategyTwo === "Always Cooperate"){
                     a = val.dilemma[0][0];
                     b = val.dilemma[0][1];
                 }else{
@@ -68,7 +63,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                     b = val.dilemma[1][1];
                 }
             }else{
-                if(val.strategyTwo === "Strategy 1"){
+                if(val.strategyTwo === "Always Cooperate"){
                     a = val.dilemma[2][0];
                     b = val.dilemma[2][1];
                 }else{
@@ -76,11 +71,28 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                     b = val.dilemma[3][1];
                 }
             }
+            
+            // Perform Score Animation
+            let pos = document.getElementById(val.id.toString())?.getBoundingClientRect();
+            if(pos != undefined){
+                this.setState({
+                    notificationAnimationPos: [Number(pos.left) + 25,
+                                                Number(pos.top) + 25,
+                                                a,
+                                                b]
+                })
+            }
+
+            this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: val.id});
             this.props.dispatch({type: 'UPDATEPOINTS', 
                                 player1: val.playerOne,
                                 player2: val.playerTwo,
                                 incrementOneBy: a,
                                 incrementTwoBy: b});
+            await delay(2000);
+            this.setState({
+                notificationAnimationPos: []
+            })
         }
         this.setState({
             isVisualizing: false
@@ -89,10 +101,24 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
         console.log("END VISUALIZATION");
     }
     render(){
+
+        let aDiv;
+        let bDiv;
+        if(this.state.notificationAnimationPos.length === 4){
+            aDiv = <div style={{left: this.state.notificationAnimationPos[0],
+                            top: this.state.notificationAnimationPos[1]}}
+                     className='pointPopupA'>{(this.state.notificationAnimationPos[2] < 0) ? "":"+"}{this.state.notificationAnimationPos[2]}</div>
+            bDiv = <div style={{left: this.state.notificationAnimationPos[0],
+                        top: this.state.notificationAnimationPos[1]}}
+                        className='pointPopupB'>{(this.state.notificationAnimationPos[3] < 0) ? "":"+"}{this.state.notificationAnimationPos[3]}</div>
+        }
+
         return(
             <>
                 <button data-test="visualizeButton" onClick={this.beginVisualization} className="visualizeButton">
                     Visualize
+                    {aDiv}
+                    {bDiv}
                 </button>
             </>
         )

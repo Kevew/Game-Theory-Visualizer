@@ -29,8 +29,6 @@ interface CanvasProps {
 }
 
 interface CanvasState {
-    // Checks if mouse is over canvas
-    over: boolean;
     // The current list of nodes in the canvas
     listOfNode: NodeState[];
     // What ID the next node will be
@@ -58,7 +56,6 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     constructor(props: CanvasProps){
         super(props);
         this.state = {
-            over: true,
             listOfNode: [],
             nodeID: 0,
             mouseX: 0,
@@ -160,20 +157,18 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
             moveState: -1
         })
-        if(this.state.over){
-            // Check if mouse is not over a node and if you have just moved it around
-            if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0 && this.props.mode == 1){
-                // If none of the above, create a node and tell the store you created one
-                this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
-                this.setState(prevState => ({
-                    listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
-                                                            id: this.state.nodeID.toString(),
-                                                            posX: this.state.mouseX,
-                                                            posY: this.state.mouseY}],
-                    nodeID: prevState.nodeID + 1,
-                    overNodeIndex: prevState.nodeID
-                }));
-            }
+        // Check if mouse is not over a node and if you have just moved it around
+        if(this.state.overNodeIndex == -1 && this.state.changeInMouse <= 0 && this.props.mode == 1){
+            // If none of the above, create a node and tell the store you created one
+            this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
+            this.setState(prevState => ({
+                listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
+                                                        id: this.state.nodeID.toString(),
+                                                        posX: this.state.mouseX,
+                                                        posY: this.state.mouseY}],
+                nodeID: prevState.nodeID + 1,
+                overNodeIndex: prevState.nodeID
+            }));
         }
     }
 
@@ -182,6 +177,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         let target = e.target as Element;
         if(target.className == "bottemHalfCircle" || target.className == "topHalfCircle"){
             target = (target.parentElement as Element).parentElement as Element;
+        }else if(target.className == "nodeWindowDiv"){
+            target = ((target.parentElement as Element).parentElement as Element).parentElement as Element;
         }
         // Move all the nodes at once
         if(this.state.moveState == 2){
@@ -200,8 +197,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
     render(){
         return(
-            <div data-test="canvas" className="canvas" onMouseEnter={() => this.setState({over: true})} 
-                                    onMouseLeave={() => this.setState({over: false})}
+            <div data-test="canvas" className="canvas"
                                     onMouseDown={(e) => this.onMouseDownEvent(e)}
                                     onMouseUp={(e) => this.onMouseUpEvent(e)}
                                     onMouseMove={(e) => this.onMouseMoveEvent(e)}>

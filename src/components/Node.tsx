@@ -42,7 +42,6 @@ class Node extends React.Component<CanvasProps, CanvasState>{
         let target = event.target as Element;
         // If mouse is clicking node, then open or close window
         // Also checks if user is currently in edit mode
-        console.log(this.props.changedSince)
         if((target.className == "bottemHalfCircle" || target.className == "topHalfCircle") && 
                                                         this.props.mode == 1 && 
                                                         this.props.changedSince <= 0.02){
@@ -53,16 +52,23 @@ class Node extends React.Component<CanvasProps, CanvasState>{
     }
 
     render(){
+        let loader;
+        if(this.props.curr_node === Number(this.props.id)){
+            loader = <div className="loader"></div>;
+        }
+
         if(!this.state.enableWindow){
             return(
                 <div data-test="node" id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
                     <NodeColor pos={true} color={this.props.topPlayerColour}/>
                     <NodeColor pos={false} color={this.props.bottemPlayerColour}/>
+                    {loader}
                 </div>
             )
         }else{
             return(
                 <div data-test="node" id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
+                    {loader}
                     <NodeColor pos={true} color={this.props.topPlayerColour}/>
                     <NodeWindow id={this.props.id}/>
                     <NodeColor pos={false} color={this.props.bottemPlayerColour}/>

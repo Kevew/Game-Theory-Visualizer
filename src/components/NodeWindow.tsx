@@ -83,8 +83,8 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                             defaultValue={this.props.startingStratOne}
                             data-test={"nodeStrategy1Selector" + this.props.id}>
                         <option className="option" value="Empty">Empty</option>
-                        <option className="option" value="Strategy 1">Strategy 1</option>
-                        <option className="option" value="Strategy 2">Strategy 2</option>
+                        <option className="option" value="Always Cooperate">Always Cooperate</option>
+                        <option className="option" value="Always Defect">Always Defect</option>
                     </select>
                     <select id={"player2Of" + this.props.id}
                             className="playerSelector"
@@ -100,8 +100,8 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                             defaultValue={this.props.startingStratTwo}
                             data-test={"nodeStrategy2Selector" + this.props.id}>
                             <option className="option" value="Empty">Empty</option>
-                            <option className="option" value="Strategy 1">Strategy 1</option>
-                            <option className="option" value="Strategy 2">Strategy 2</option>
+                            <option className="option" value="Always Cooperate">Always Cooperate</option>
+                            <option className="option" value="Always Defect">Always Defect</option>
                     </select>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[0].toString()}></input>
                     <input className="pointInputBar" defaultValue={this.props.dilemma[1].toString()}></input>

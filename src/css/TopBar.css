@@ -24,3 +24,65 @@
 .visualizeButton {
     background-color: #94F3E4 !important;
 }
+
+/*    Active Mode Button     */
+
+.activeMode{
+    border-bottom: 5px solid rgb(34, 107, 226);
+    background-color: #2d8e83 !important;
+}
+
+/*     CSS for point notification popup        */
+.pointPopupA{
+    position: fixed;
+    z-index: -1;
+    font-size: 30px;
+    color: white;
+    text-shadow: 0 0 10px #fff, 0px 0px 20px #fff;
+    animation: moveUp 2.01s linear infinite;
+    user-select: none;
+}
+.pointPopupB{
+    position: fixed;
+    z-index: -1;
+    font-size: 30px;
+    color: white;
+    text-shadow: 0 0 10px #fff, 0px 0px 20px #fff;
+    animation: moveDown 2.01s linear infinite;
+    user-select: none;
+}
+
+@keyframes moveUp{
+    0%{
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    30%{
+        transform: translate(0, -75px);
+        opacity: 0.8;
+    }
+    75%{
+        transform: translate(0, -100px);
+    }
+    100%{
+        transform: translate(0, -125px);
+        opacity: 0;
+    }
+}
+@keyframes moveDown{
+    0%{
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    30%{
+        transform: translate(0, 75px);
+        opacity: 0.8;
+    }
+    75%{
+        transform: translate(0, 100px);
+    }
+    100%{
+        transform: translate(0, 125px);
+        opacity: 0;
+    }
+}

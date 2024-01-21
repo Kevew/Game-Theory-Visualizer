@@ -3,8 +3,8 @@
     width: 200%;
     height: 250%;
     left: 150px;
-    background-color: #F7F0F5;
-    border: 2px solid #000000;
+    background-color: #878186;
+    border: 2px solid #ffffff;
 }
 
 .formSelector{
@@ -19,7 +19,7 @@ select {
     padding: 0 0.5em;
     margin: 2px;
     color: black;
-    background-color: #DECBB7;
+    background-color: #6c645b;
     background-image: none;
     cursor: pointer;
     text-align: center;
