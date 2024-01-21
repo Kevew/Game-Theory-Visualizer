@@ -11,7 +11,8 @@
 }
 
 .selected{
-  animation: glow 2s infinite alternate;
+  animation: glow 2s linear;
+  animation-fill-mode: forwards ;
 }
 
 @keyframes glow {

@@ -39,7 +39,8 @@
     font-size: 30px;
     color: white;
     text-shadow: 0 0 10px #fff, 0px 0px 20px #fff;
-    animation: moveUp 2.01s linear infinite;
+    animation: moveUp 2s linear;
+    animation-fill-mode: forwards;
     user-select: none;
 }
 .pointPopupB{
@@ -48,7 +49,8 @@
     font-size: 30px;
     color: white;
     text-shadow: 0 0 10px #fff, 0px 0px 20px #fff;
-    animation: moveDown 2.01s linear infinite;
+    animation: moveDown 2s linear;
+    animation-fill-mode: forwards;
     user-select: none;
 }
 

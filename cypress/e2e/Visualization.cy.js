@@ -11,10 +11,13 @@ describe('Visualization', () => {
     
 
     cy.get('div[data-test="canvas"]').click()
-    moveNode(300, 350);
+    moveNode(300, 200);
 
     cy.get('div[data-test="canvas"]').click()
-    moveNode(675, 350);
+    moveNode(675, 200);
+
+    cy.get('div[data-test="canvas"]').click()
+    moveNode(500, 450);
 
     cy.wait(100)
 
@@ -32,17 +35,28 @@ describe('Visualization', () => {
     cy.get('[data-test="nodeStrategy2Selector1"]').select('Always Defect')
     cy.get('[data-test="saveChanges1"]').click()
 
+    cy.get('[data-test="player1Of2"]').select('Player 2')
+    cy.get('[data-test="player2Of2"]').select('Player 1')
+    cy.get('[data-test="nodeStrategy1Selector2"]').select('Always Defect')
+    cy.get('[data-test="nodeStrategy2Selector2"]').select('Always Defect')
+    cy.get('[data-test="saveChanges2"]').click()
+
 
     cy.get('[data-test="visualizeButton"]').click()
-
-    cy.wait(2000);
 
     cy.get('[data-test="playerPoints0"]').contains('1');
     cy.get('[data-test="playerPoints1"]').contains('1');
 
-    cy.wait(2000);
+    cy.wait(2050);
 
-    cy.get('[data-test="playerPoints0"]').contains('3');
-    cy.get('[data-test="playerPoints1"]').contains('3');
+    cy.get('[data-test="playerPoints0"]').contains('2');
+    cy.get('[data-test="playerPoints1"]').contains('2');
+
+    cy.wait(2050);
+
+    cy.get('[data-test="playerPoints0"]').contains('4');
+    cy.get('[data-test="playerPoints1"]').contains('4');
+
+    cy.wait(2050);
   })
 })

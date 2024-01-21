@@ -74,6 +74,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
             
             // Perform Score Animation
             let pos = document.getElementById(val.id.toString())?.getBoundingClientRect();
+            this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: val.id});
             if(pos != undefined){
                 this.setState({
                     notificationAnimationPos: [Number(pos.left) + 25,
@@ -82,8 +83,6 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                                                 b]
                 })
             }
-
-            this.props.dispatch({type: 'SIMULATIONNODESELECTOR', node_id: val.id});
             this.props.dispatch({type: 'UPDATEPOINTS', 
                                 player1: val.playerOne,
                                 player2: val.playerTwo,
@@ -93,6 +92,7 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
             this.setState({
                 notificationAnimationPos: []
             })
+            await delay(50);
         }
         this.setState({
             isVisualizing: false
@@ -112,7 +112,6 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
                         top: this.state.notificationAnimationPos[1]}}
                         className='pointPopupB'>{(this.state.notificationAnimationPos[3] < 0) ? "":"+"}{this.state.notificationAnimationPos[3]}</div>
         }
-
         return(
             <>
                 <button data-test="visualizeButton" onClick={this.beginVisualization} className="visualizeButton">
