@@ -1,9 +1,5 @@
 import { initialState, State } from '../states';
 
-type Action = {
-    type: 'RESETPOINTS',
-}
-
 // Reset's the scoreboard to 0
 export const reset_points = (state: State = initialState): State => {
     let pointsTable = {...state.playerList};
