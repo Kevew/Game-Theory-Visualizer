@@ -21,6 +21,10 @@ interface NodeState {
     fromNodeConnect: string[];
 }
 
+interface NodeStateDict {
+    [key: string]: NodeState;
+}
+
 // The information that each connection arrow state will currently hold
 interface ConnectionArrowState {
     id: string;
@@ -44,6 +48,10 @@ interface ConnectionArrowState {
     truePosY: number;
 }
 
+interface ConnectionArrowStateDict {
+    [key: string]: ConnectionArrowState;
+}
+
 interface CanvasProps {
     // Current Node Manipulation Mode
     // 1 - Add/Edit Node
@@ -58,9 +66,9 @@ interface CanvasProps {
 
 interface CanvasState {
     // The current list of nodes in the canvas
-    listOfNode: NodeState[];
+    listOfNode: NodeStateDict;
     // The current list of connections in the canvas
-    listOfConnection: ConnectionArrowState[];
+    listOfConnection: ConnectionArrowStateDict;
     // What ID the next node will be
     nodeID: number;
     // What ID the next connectionArrow will be
@@ -69,7 +77,7 @@ interface CanvasState {
     mouseX: number;
     mouseY: number;
     // Check which node the mouse is currently over
-    overNodeIndex: number;
+    overNodeIndex: string;
 
 
     /* Variables for canvas movement  */
@@ -80,7 +88,7 @@ interface CanvasState {
     changeInMouse: number;
 
     // Is creating a connection between two nodes
-    connectState: number;
+    connectState: string;
 }
 
 // Offset for node placement
@@ -91,31 +99,30 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     constructor(props: CanvasProps){
         super(props);
         this.state = {
-            listOfNode: [],
-            listOfConnection: [],
+            listOfNode: {} as NodeStateDict,
+            listOfConnection: {} as ConnectionArrowStateDict,
             nodeID: 0,
             arrowID: 0,
             mouseX: 0,
             mouseY: 0,
-            overNodeIndex: -1,
+            overNodeIndex: "-1",
             moveState: -1,
             origMouseDown: [0, 0],
             changeInMouse: 0,
-            connectState: -1
+            connectState: "-1"
         }
     }
 
     // Move a specific node around
     moveSelectedNode = (nodeIndex: number, xMove: number, yMove: number) => {
+
+        let newListOfNode = this.state.listOfNode;
+        newListOfNode[nodeIndex].posX = xMove;
+        newListOfNode[nodeIndex].posY = yMove;
+
         // Updates the specific node
         this.setState(prevstate => ({
-            listOfNode: [...this.state.listOfNode.slice(0, nodeIndex), 
-                        {
-                            ...this.state.listOfNode[nodeIndex],
-                            posX: xMove,
-                            posY: yMove,
-                        },
-                        ...this.state.listOfNode.slice(nodeIndex + 1)],
+            listOfNode: newListOfNode,
             changeInMouse: prevstate.changeInMouse + 0.01
         }));
 
@@ -127,11 +134,11 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         // Calculate new positions for to arrows
         for(let i = 0;i < listToNode.length;i++){
 
-            let valID = this.state.listOfConnection.findIndex(connect => connect.id === listToNode[i]);
+            let valID = this.state.listOfConnection[listToNode[i]].id;
 
             let fromNodeID = this.state.listOfConnection[valID].fromNode;
             // Calculate New Angle
-            let oldVal = this.state.listOfNode[this.state.listOfNode.findIndex(current => current.id === fromNodeID)];
+            let oldVal = this.state.listOfNode[fromNodeID];
             let newRotateVal = Math.atan2(yMove - oldVal.posY, xMove - oldVal.posX) * 180 / Math.PI;
 
             // Calculate New Position
@@ -146,12 +153,12 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         listToNode = this.state.listOfNode[nodeIndex].fromNodeConnect;
         for(let i = 0;i < listToNode.length;i++){
             
-            let currentNodeID = this.state.listOfConnection.findIndex(connect => connect.id === listToNode[i]);
+            let currentNodeID = this.state.listOfConnection[listToNode[i]].id;
             let toNodeID = this.state.listOfConnection[currentNodeID].toNode;
             let fromNodeID = this.state.listOfConnection[currentNodeID].fromNode;
 
-            let toVal = this.state.listOfNode[this.state.listOfNode.findIndex(current => current.id === toNodeID)];
-            let oldVal = this.state.listOfNode[this.state.listOfNode.findIndex(current => current.id === fromNodeID)];
+            let toVal = this.state.listOfNode[toNodeID];
+            let oldVal = this.state.listOfNode[fromNodeID];
             let newRotateVal = Math.atan2(toVal.posY - oldVal.posY, toVal.posX - oldVal.posX) * 180 / Math.PI;
             
             let newPosX = (toVal.posX + oldVal.posX)/2;
@@ -170,7 +177,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     // Move all the nodes around at once
     moveAll = (origX: number, origY: number, changeX: number, changeY: number) => {
         let newList = this.state.listOfNode;
-        for(let i = 0;i < newList.length;i++){
+        for(let i in newList){
             newList[i] = {
                 ...newList[i],
                 posX: newList[i].posX + (changeX - origX),
@@ -178,7 +185,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             }
         }
         let newArrowList = this.state.listOfConnection;
-        for(let i = 0;i < newArrowList.length;i++){
+        for(let i in newArrowList){
             newArrowList[i] = {
                 ...newArrowList[i],
                 truePosX: newArrowList[i].truePosX + (changeX - origX),
@@ -200,8 +207,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         if(target.className == "bottemHalfCircle" || target.className == "topHalfCircle"){
             // If edit mode, then start moving it
             let targetID = target.parentElement ? target.parentElement.id : undefined;
-            if(this.props.mode == 1){
-                const nodeIndex = this.state.listOfNode.findIndex(node => node.id === targetID);
+            if(this.props.mode == 1 && targetID != undefined){
+                const nodeIndex = targetID;
                 this.setState({
                     mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                     mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
@@ -210,14 +217,14 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                     changeInMouse: 0
                 })
                 // Check if props
-            }else if(this.props.mode == 2){
-                const nodeID = this.state.listOfNode.find(node => node.id === targetID)?.id;
+            }else if(this.props.mode == 2 && targetID != undefined){
+                const nodeID = this.state.listOfNode[targetID].id;
                 this.props.dispatch({
                     type: "DELETENODE",
                     node_id: nodeID
                 });
                 let newNodeList = this.state.listOfNode;
-                newNodeList.splice(newNodeList.findIndex(node => node.id === targetID), 1);
+                delete newNodeList[targetID];
                 this.setState({
                     listOfNode: newNodeList,
                 })
@@ -227,7 +234,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             this.setState({
                 mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                 mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
-                overNodeIndex: -1,
+                overNodeIndex: "-1",
                 moveState: 2,
                 origMouseDown: [e.clientX - target.getBoundingClientRect().left - offsetX,
                                 e.clientY - target.getBoundingClientRect().top - offsetY],
@@ -238,9 +245,9 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             this.setState({
                 mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
                 mouseY: e.clientY - target.getBoundingClientRect().top - offsetY,
-                overNodeIndex: -2,
+                overNodeIndex: "-2",
                 moveState: -1,
-                connectState: -1
+                connectState: "-1"
             })
         }
     }
@@ -249,8 +256,8 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
     onMouseUpEvent = async(e: React.MouseEvent) => {
         let target = e.target as Element;
         // Check if player wants to create a connection
-        if(this.state.overNodeIndex >= 0 && this.state.changeInMouse <= 0 && this.props.mode == 3){
-            if(this.state.connectState === -1){
+        if(Number(this.state.overNodeIndex) >= 0 && this.state.changeInMouse <= 0 && this.props.mode == 3){
+            if(this.state.connectState === "-1"){
                 // Select first node
                 let valID = Number((target.parentElement as Element).id);
                 await this.setState({
@@ -261,21 +268,24 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
 
                 let newListofNode = this.state.listOfNode;
                 newListofNode[Number(valID)].fromNodeConnect.push(this.state.arrowID.toString());
+
+                let newListofConnection = this.state.listOfConnection;
+                newListofConnection[this.state.arrowID.toString()] =
+                    {id: this.state.arrowID.toString(),
+                    fromNode: valID.toString(),
+                    toNode: "-1",
+                    isConnected: false,
+                    rotateVal: 0,
+                    posX: this.state.mouseX,
+                    posY: this.state.mouseY,
+                    truePosX: this.state.mouseX,
+                    truePosY: this.state.mouseY};
                 
                 this.setState(prevState => ({
-                    listOfConnection: [...this.state.listOfConnection, 
-                                        {id: this.state.arrowID.toString(),
-                                        fromNode: prevState.arrowID.toString(),
-                                        toNode: "-1",
-                                        isConnected: false,
-                                        rotateVal: 0,
-                                        posX: this.state.mouseX,
-                                        posY: this.state.mouseY,
-                                        truePosX: this.state.mouseX,
-                                        truePosY: this.state.mouseY}],
+                    listOfConnection: newListofConnection,
                     listOfNode: newListofNode,
                     arrowID: prevState.arrowID + 1,
-                    connectState: Number(prevState.arrowID)
+                    connectState: prevState.arrowID.toString()
                 }));
             }else{
                 // Select second node
@@ -284,27 +294,25 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 let newListofNode = this.state.listOfNode;
                 newListofNode[Number(valID)].toNodeConnect.push(this.state.connectState.toString());
 
+                let _newListofConnection = this.state.listOfConnection;
+                _newListofConnection[this.state.connectState.toString()].toNode = valID;
+
                 this.setState({
-                    listOfConnection: [...this.state.listOfConnection.slice(0, this.state.connectState),
-                                        {
-                                            ...this.state.listOfConnection[this.state.connectState],
-                                            toNode: valID
-                                        },
-                                        ...this.state.listOfConnection.slice(this.state.connectState + 1)],
+                    listOfConnection: _newListofConnection,
                     listOfNode: newListofNode,
-                    connectState: -1
+                    connectState: "-1"
                 });
             }
-        }else if(this.state.overNodeIndex == -1 && 
+        }else if(Number(this.state.overNodeIndex) == -1 && 
             this.props.mode == 3 && 
-            this.state.connectState >= 0){
+            Number(this.state.connectState) >= 0){
             // Check if click is over canvas and is currently trying to place connection
             
             
-        }else if(this.state.overNodeIndex == -1 && 
+        }else if(Number(this.state.overNodeIndex) == -1 && 
             this.state.changeInMouse <= 0 && 
             this.props.mode == 1 &&
-            this.state.connectState == -1){
+            Number(this.state.connectState) == -1){
             // Check if mouse is not over a node and if you have just moved it around
             // If none of the above, create a node and tell the store you created one
             await this.setState({
@@ -313,15 +321,18 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 moveState: -1
             })
             this.props.dispatch({ type: 'INCREMENT', node_id: this.state.nodeID.toString() })
+            let newListOfNode = this.state.listOfNode;
+            newListOfNode[this.state.nodeID.toString()] = {
+                            key: this.state.nodeID,
+                            id: this.state.nodeID.toString(),
+                            posX: this.state.mouseX,
+                            posY: this.state.mouseY,
+                            toNodeConnect: [],
+                            fromNodeConnect: []};
             this.setState(prevState => ({
-                listOfNode: [...this.state.listOfNode, {key: this.state.nodeID,
-                                                        id: this.state.nodeID.toString(),
-                                                        posX: this.state.mouseX,
-                                                        posY: this.state.mouseY,
-                                                        toNodeConnect: [],
-                                                        fromNodeConnect: []}],
+                listOfNode: newListOfNode,
                 nodeID: prevState.nodeID + 1,
-                overNodeIndex: prevState.nodeID
+                overNodeIndex: prevState.nodeID.toString()
             }));
         }
         this.setState({
@@ -348,13 +359,13 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         }else if(this.state.moveState == 1){
             let x = e.clientX - target.getBoundingClientRect().left - offsetX;
             let y = e.clientY - target.getBoundingClientRect().top - offsetY;
-            this.moveSelectedNode(this.state.overNodeIndex, x, y)
+            this.moveSelectedNode(Number(this.state.overNodeIndex), x, y)
         }
 
 
 
         // Move connection if possible
-        if(this.state.connectState != -1){
+        if(Number(this.state.connectState) != -1){
             // Calculate New Angle
             let mouseX = e.clientX - target.getBoundingClientRect().left - offsetX;
             let mouseY = e.clientY - target.getBoundingClientRect().top - offsetY;
@@ -365,15 +376,13 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             let newPosX = (mouseX + oldVal.posX)/2;
             let newPosY = (mouseY + oldVal.posY)/2;
 
+            let newListOfConnection = this.state.listOfConnection;
+            newListOfConnection[this.state.connectState.toString()].rotateVal = newRotateVal;
+            newListOfConnection[this.state.connectState.toString()].truePosX = newPosX;
+            newListOfConnection[this.state.connectState.toString()].truePosY = newPosY;
+
             this.setState({
-                listOfConnection: [...this.state.listOfConnection.slice(0, this.state.connectState),
-                                    {
-                                        ...this.state.listOfConnection[this.state.connectState],
-                                        rotateVal: newRotateVal,
-                                        truePosX: newPosX,
-                                        truePosY: newPosY
-                                    },
-                                    ...this.state.listOfConnection.slice(this.state.connectState + 1)],
+                listOfConnection: newListOfConnection,
             });
         }
     }
@@ -385,7 +394,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                     onMouseUp={(e) => this.onMouseUpEvent(e)}
                                     onMouseMove={(e) => this.onMouseMoveEvent(e)}>
                 {
-                    this.state.listOfNode.map(node => 
+                    Object.values(this.state.listOfNode).map(node => 
                         <Node   key={node.key}
                                 id={node.id}
                                 posX={node.posX}
@@ -397,10 +406,10 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                 bottemPlayerColour=""/>)
                 }
                 {
-                    this.state.listOfConnection.map(node =>
+                    Object.values(this.state.listOfConnection).map(node =>
                         <ArrowComponent
-                            key={node.id + 1000000}
-                            posX={node.truePosX} 
+                            key={node.id + 10000}
+                            posX={node.truePosX}
                             posY={node.truePosY}
                             rotateVal={node.rotateVal}/>)
                 }
