@@ -11,7 +11,7 @@ export const increment = (state: State = initialState, action: Action): State =>
         id: Number(action.node_id),
         connect_to: [],
         playerOne: Object.keys(state.playerList)[0],
-        playerTwo: Object.keys(state.playerList)[1],
+        playerTwo: Object.keys(state.playerList)[0],
         strategyOne: 'Empty',
         strategyTwo: 'Empty',
         dilemma: [[2, 2], [0, 4], [4, 0], [1, 1]]

@@ -62,7 +62,8 @@ export interface State {
 export const initialState: State = {
     count: 0,
     nodeDict: {} as NodeDict,
-    playerList: {'Player 1': {cnt: 1, points: 0, colorAsso: '#FF0000'},
+    playerList: {'Empty': {cnt: 0, points: 0, colorAsso: '#c4c4c4'},
+                 'Player 1': {cnt: 1, points: 0, colorAsso: '#FF0000'},
                  'Player 2': {cnt: 1, points: 0, colorAsso: '#0000FF'}} as PlayerDict,
     mode: 1,
     currentNode: -1,

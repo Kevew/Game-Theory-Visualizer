@@ -3,3 +3,14 @@
     height: 100%;
     background-color: black;
 }
+
+.arrowComponent{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(49deg) brightness(103%) contrast(103%);
+    z-index: 100;
+    transform-origin: center;
+    pointer-events: none;
+
+}

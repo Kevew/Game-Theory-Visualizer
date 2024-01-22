@@ -40,7 +40,7 @@ class PlayerList extends React.Component<CanvasProps, CanvasState>{
             <>
                 {
                     this.props.playerList.map((node, index) => 
-                        <PlayerListElement index={index} node={node} />)
+                        ((node[0] != "Empty")? <PlayerListElement index={index} node={node} /> : <></>))
                 }
             </>
         )

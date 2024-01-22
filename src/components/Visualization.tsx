@@ -40,7 +40,11 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
         // Get all the starting nodes
         let queue: NodeState[] = [];
         Object.values(this.props.nodeState).forEach(function(value) {
-            if(value.strategyOne != "Empty" && value.strategyTwo != "Empty"){
+            // Make sure the node is a starting node
+            if(value.strategyOne != "Empty" && 
+                value.strategyTwo != "Empty" &&
+                value.playerOne != "Empty" &&
+                value.playerTwo != "Empty"){
                 queue.push(value);
             }
         });          
