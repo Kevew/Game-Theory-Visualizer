@@ -1,6 +1,7 @@
 # Game Theory Visualizer
 
 > An interactive React-based web app that allows users to simulate Game Theory strategies against each other
+You can check it out here: https://game-theory-visualizer.vercel.app/
 
 ## Requirements
 
