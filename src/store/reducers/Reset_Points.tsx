@@ -5,7 +5,7 @@ type Action = {
 }
 
 // Reset's the scoreboard to 0
-export const reset_points = (state: State = initialState, action: Action): State => {
+export const reset_points = (state: State = initialState): State => {
     let pointsTable = {...state.playerList};
     Object.keys(pointsTable).forEach(key => {
         pointsTable[key].points = 0;

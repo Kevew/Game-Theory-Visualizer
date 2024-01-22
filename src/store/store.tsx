@@ -78,7 +78,7 @@ const reducer = (state: State = initialState, action: Action): State => {
     case 'UPDATEDILEMMA':
       return update_dilemma(state, action);
     case 'RESETPOINTS':
-      return reset_points(state, action);
+      return reset_points(state);
     case 'ADDPLAYER':
       return add_player(state, action);
     case 'MODESELECTOR':
