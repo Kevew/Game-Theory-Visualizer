@@ -316,7 +316,9 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                                 posY={node.posY}
                                 mode={this.props.mode}
                                 changedSince={this.state.changeInMouse}
-                                curr_node={this.props.curr_node}/>)
+                                curr_node={this.props.curr_node}
+                                topPlayerColour=""
+                                bottemPlayerColour=""/>)
                 }
                 {
                     this.state.listOfConnection.map(node =>
