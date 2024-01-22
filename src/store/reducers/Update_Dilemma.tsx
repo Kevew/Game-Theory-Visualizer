@@ -1,4 +1,4 @@
-import { initialState, NodeDict, State } from '../states';
+import { initialState, State } from '../states';
 
 type Action = {
     type: 'UPDATEDILEMMA',

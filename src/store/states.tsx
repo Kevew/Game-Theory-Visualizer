@@ -26,9 +26,6 @@ export interface NodeState{
     dilemma: number[][];
 }
 
-
-
-
 export interface NodeDict {
     [key: string]: NodeState;
 }

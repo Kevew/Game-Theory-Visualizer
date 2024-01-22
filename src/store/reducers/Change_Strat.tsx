@@ -1,4 +1,4 @@
-import { initialState, State, NodeState } from '../states';
+import { initialState, State } from '../states';
 
 type Action = {
     type: 'CHANGE_STRAT',
