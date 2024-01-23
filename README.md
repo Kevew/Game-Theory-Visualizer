@@ -5,7 +5,7 @@ You can check it out here: https://game-theory-visualizer.vercel.app/
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/) 18+
+- None! Just make sure npm is installed.
 
 ## Local Hosting
 
