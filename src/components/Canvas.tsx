@@ -207,7 +207,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         if(target.className == "bottemHalfCircle" || target.className == "topHalfCircle"){
             // If edit mode, then start moving it
             let targetID = target.parentElement ? target.parentElement.id : undefined;
-            if(this.props.mode == 1 && targetID != undefined){
+            if((this.props.mode == 1 || this.props.mode == 3) && targetID != undefined){
                 const nodeIndex = targetID;
                 this.setState({
                     mouseX: e.clientX - target.getBoundingClientRect().left - offsetX,
@@ -218,11 +218,19 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 })
                 // Check if props
             }else if(this.props.mode == 2 && targetID != undefined){
-                const nodeID = this.state.listOfNode[targetID].id;
+                const node = this.state.listOfNode[targetID];
                 this.props.dispatch({
                     type: "DELETENODE",
-                    node_id: nodeID
+                    node_id: node.id
                 });
+
+                for(let i = 0;i < node.fromNodeConnect.length;i++){
+                    this.deleteConnection(node.fromNodeConnect[i]);
+                }
+                for(let i = 0;i < node.toNodeConnect.length;i++){
+                    this.deleteConnection(node.toNodeConnect[i]);
+                }
+
                 let newNodeList = this.state.listOfNode;
                 delete newNodeList[targetID];
                 this.setState({
@@ -250,6 +258,28 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 connectState: "-1"
             })
         }
+    }
+
+    deleteConnection = (connectID: string) => {
+        // Check if click is over canvas and is currently trying to place connection
+        let newListofConnection = this.state.listOfConnection;
+        let newListOfNode = this.state.listOfNode;
+        // Updated the two nodes that contain the connection
+        let temp = newListOfNode[newListofConnection[connectID].fromNode].fromNodeConnect;
+        temp.splice(temp.findIndex(connect => connect == connectID), 1);
+        newListOfNode[newListofConnection[connectID].fromNode].fromNodeConnect = temp;
+        if(newListofConnection[connectID].toNode != "-1"){
+            let temp = newListOfNode[newListofConnection[connectID].toNode].toNodeConnect;
+            temp.splice(temp.findIndex(connect => connect == connectID), 1);
+            newListOfNode[newListofConnection[connectID].toNode].toNodeConnect = temp;
+        }
+        // Delete connection so it doesn't render
+        delete newListofConnection[connectID];
+        this.setState({
+            listOfConnection: newListofConnection,
+            listOfNode: newListOfNode,
+            connectState: "-1",
+        })
     }
 
     // When the mouse click is finally lifted up
@@ -291,24 +321,26 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 // Select second node
                 let valID = (target.parentElement as Element).id;
 
-                let newListofNode = this.state.listOfNode;
-                newListofNode[Number(valID)].toNodeConnect.push(this.state.connectState.toString());
-
                 let _newListofConnection = this.state.listOfConnection;
                 _newListofConnection[this.state.connectState.toString()].toNode = valID;
 
-                this.setState({
-                    listOfConnection: _newListofConnection,
-                    listOfNode: newListofNode,
-                    connectState: "-1"
-                });
+                let newListofNode = this.state.listOfNode;
+                newListofNode[valID].toNodeConnect.push(this.state.connectState.toString());
+
+                if(_newListofConnection[this.state.connectState.toString()].fromNode != valID){
+                    this.setState({
+                        listOfConnection: _newListofConnection,
+                        listOfNode: newListofNode,
+                        connectState: "-1"
+                    });
+                }else{
+                    this.deleteConnection(this.state.connectState)
+                }
             }
         }else if(Number(this.state.overNodeIndex) == -1 && 
             this.props.mode == 3 && 
             Number(this.state.connectState) >= 0){
-            // Check if click is over canvas and is currently trying to place connection
-            
-            
+            this.deleteConnection(this.state.connectState);
         }else if(Number(this.state.overNodeIndex) == -1 && 
             this.state.changeInMouse <= 0 && 
             this.props.mode == 1 &&
