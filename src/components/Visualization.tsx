@@ -29,6 +29,8 @@ class Visualize extends React.Component<CanvasProps, CanvasState>{
     // When the Visualization Button has been clicked, begin the simulatio
     beginVisualization = async() => {
         // If it is already visualizing, stop visualizing
+        // During the visualization, a record of the deleted connectTo nodes will be noted
+        // and updated at the end of the visualization
         if(this.state.isVisualizing){
             return;
         }

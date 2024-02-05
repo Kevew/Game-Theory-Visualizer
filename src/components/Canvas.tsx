@@ -15,10 +15,13 @@ interface NodeState {
     // It's position on the Y axis relative to the canvas
     posY: number;
 
-    // All the node ids that are connected TO this node
-    toNodeConnect: string[];
+    // All the arrow ids that are connected TO this node
+    toArrowConnect: string[];
+    // All the arrow ids that are connected FROM this node
+    fromArrowConnect: string[];
+
     // All the node ids that are connected FROM this node
-    fromNodeConnect: string[];
+    fromNodeConnect: Set<string>;
 }
 
 interface NodeStateDict {
@@ -129,7 +132,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         // Get the list of connections so that it updates all the ones connected to that node
         let newListOfConnection = this.state.listOfConnection;
 
-        let listToNode = this.state.listOfNode[nodeIndex].toNodeConnect;
+        let listToNode = this.state.listOfNode[nodeIndex].toArrowConnect;
 
         // Calculate new positions for to arrows
         for(let i = 0;i < listToNode.length;i++){
@@ -142,7 +145,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             let newRotateVal = Math.atan2(yMove - oldVal.posY, xMove - oldVal.posX) * 180 / Math.PI;
 
             // Calculate New Position
-            let newPosX = (xMove + oldVal.posX - 50)/2;
+            let newPosX = (xMove + oldVal.posX)/2;
             let newPosY = (yMove + oldVal.posY)/2;
 
             newListOfConnection[valID].truePosX = newPosX;
@@ -150,7 +153,7 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
             newListOfConnection[valID].rotateVal = newRotateVal;
         }
         // Calculate new positions for from arrows
-        listToNode = this.state.listOfNode[nodeIndex].fromNodeConnect;
+        listToNode = this.state.listOfNode[nodeIndex].fromArrowConnect;
         for(let i = 0;i < listToNode.length;i++){
             
             let currentNodeID = this.state.listOfConnection[listToNode[i]].id;
@@ -224,14 +227,16 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                     node_id: node.id
                 });
 
-                for(let i = 0;i < node.fromNodeConnect.length;i++){
-                    this.deleteConnection(node.fromNodeConnect[i]);
+                for(let i = 0;i < node.fromArrowConnect.length;i++){
+                    this.deleteConnection(node.fromArrowConnect[i]);
                 }
-                for(let i = 0;i < node.toNodeConnect.length;i++){
-                    this.deleteConnection(node.toNodeConnect[i]);
+
+                for(let i = 0;i < node.toArrowConnect.length;i++){
+                    this.deleteConnection(node.toArrowConnect[i]);
                 }
 
                 let newNodeList = this.state.listOfNode;
+
                 delete newNodeList[targetID];
                 this.setState({
                     listOfNode: newNodeList,
@@ -265,13 +270,13 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
         let newListofConnection = this.state.listOfConnection;
         let newListOfNode = this.state.listOfNode;
         // Updated the two nodes that contain the connection
-        let temp = newListOfNode[newListofConnection[connectID].fromNode].fromNodeConnect;
+        let temp = newListOfNode[newListofConnection[connectID].fromNode].fromArrowConnect;
         temp.splice(temp.findIndex(connect => connect == connectID), 1);
-        newListOfNode[newListofConnection[connectID].fromNode].fromNodeConnect = temp;
+        newListOfNode[newListofConnection[connectID].fromNode].fromArrowConnect = temp;
         if(newListofConnection[connectID].toNode != "-1"){
-            let temp = newListOfNode[newListofConnection[connectID].toNode].toNodeConnect;
+            let temp = newListOfNode[newListofConnection[connectID].toNode].toArrowConnect;
             temp.splice(temp.findIndex(connect => connect == connectID), 1);
-            newListOfNode[newListofConnection[connectID].toNode].toNodeConnect = temp;
+            newListOfNode[newListofConnection[connectID].toNode].toArrowConnect = temp;
         }
         // Delete connection so it doesn't render
         delete newListofConnection[connectID];
@@ -297,17 +302,19 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 })
 
                 let newListofNode = this.state.listOfNode;
-                newListofNode[Number(valID)].fromNodeConnect.push(this.state.arrowID.toString());
+                newListofNode[valID].fromArrowConnect.push(this.state.arrowID.toString());
 
                 let newListofConnection = this.state.listOfConnection;
+                let newPosX = newListofNode[valID].posX;
+                let newPosY = newListofNode[valID].posY;
                 newListofConnection[this.state.arrowID.toString()] =
                     {id: this.state.arrowID.toString(),
                     fromNode: valID.toString(),
                     toNode: "-1",
                     isConnected: false,
                     rotateVal: 0,
-                    posX: this.state.mouseX,
-                    posY: this.state.mouseY,
+                    posX: newPosX,
+                    posY: newPosY,
                     truePosX: this.state.mouseX,
                     truePosY: this.state.mouseY};
                 
@@ -325,14 +332,26 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                 _newListofConnection[this.state.connectState.toString()].toNode = valID;
 
                 let newListofNode = this.state.listOfNode;
-                newListofNode[valID].toNodeConnect.push(this.state.connectState.toString());
+                newListofNode[valID].toArrowConnect.push(this.state.connectState.toString());
 
-                if(_newListofConnection[this.state.connectState.toString()].fromNode != valID){
-                    this.setState({
-                        listOfConnection: _newListofConnection,
-                        listOfNode: newListofNode,
-                        connectState: "-1"
-                    });
+                let oldNodeId = _newListofConnection[this.state.connectState.toString()].fromNode;
+                
+                // Check if the new node is not the same as the starting node
+                if(oldNodeId != valID){
+                    // Check if there is already a connection between them
+                    if(newListofNode[valID].fromNodeConnect.has(oldNodeId)){
+                        this.deleteConnection(this.state.connectState)
+                    }else if(newListofNode[oldNodeId].fromNodeConnect.has(valID)){
+                        // Check if there is already a connection from starting node to new node
+                        this.deleteConnection(this.state.connectState)
+                    }else{
+                        newListofNode[oldNodeId].fromNodeConnect.add(valID);
+                        this.setState({
+                            listOfConnection: _newListofConnection,
+                            listOfNode: newListofNode,
+                            connectState: "-1"
+                        });
+                    }
                 }else{
                     this.deleteConnection(this.state.connectState)
                 }
@@ -359,8 +378,9 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                             id: this.state.nodeID.toString(),
                             posX: this.state.mouseX,
                             posY: this.state.mouseY,
-                            toNodeConnect: [],
-                            fromNodeConnect: []};
+                            toArrowConnect: [],
+                            fromArrowConnect: [],
+                            fromNodeConnect: new Set()};
             this.setState(prevState => ({
                 listOfNode: newListOfNode,
                 nodeID: prevState.nodeID + 1,
