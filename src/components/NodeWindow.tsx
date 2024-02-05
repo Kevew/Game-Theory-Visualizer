@@ -6,6 +6,10 @@ import { PlayerDict, State } from '../store/states';
 interface CanvasProps {
     //ID of the node this window is attached to
     id: string,
+
+    // Function call back to close window
+    closeWindow: Function;
+
     /* Information from the store */
     // The saved strategies that it holds
     startingStratOne: string,
@@ -21,12 +25,21 @@ interface CanvasProps {
     storePlayer: PlayerDict;
 }
 
-interface CanvasState {}
+interface CanvasState {
+    hidePlayer1: string,
+    hidePlayer2: string,
+}
 
 
 class NodeWindow extends React.Component<CanvasProps, CanvasState>{
     constructor(props: CanvasProps){
         super(props);
+        this.state = {
+            hidePlayer1: 
+                (props.startingPlayerOne != "Empty") ? props.startingPlayerOne : "",
+            hidePlayer2:
+                (props.startingPlayerTwo != "Empty") ? props.startingPlayerTwo : "",
+        };
     }
 
     // Save changes for node
@@ -63,6 +76,22 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
         this.props.dispatch({ type: 'UPDATEDILEMMA',
                               updatedVer: [input1, input2, input3, input4],
                               node_id: this.props.id});
+
+        // Close the window
+        this.props.closeWindow();
+    }
+
+    selectPlayer = (e: React.ChangeEvent<HTMLSelectElement>, selector: number) => {
+        
+        if(selector == 0){
+            this.setState({
+                hidePlayer1: (e.target.value != "Empty") ? e.target.value : ""
+            });
+        }else{
+            this.setState({
+                hidePlayer2: (e.target.value != "Empty") ? e.target.value : ""
+            });
+        }
     }
     
     render(){
@@ -72,10 +101,12 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                     <select id={"player1Of" + this.props.id}
                             className="playerSelector"
                             defaultValue={this.props.startingPlayerOne}
-                            data-test={"player1Of" + this.props.id}>
+                            data-test={"player1Of" + this.props.id}
+                            onChange={(e) => this.selectPlayer(e, 0)}>
                             {
                                 Object.keys(this.props.storePlayer).map((node, index) => 
-                                <option key={index} className="option" value={node}>{node}</option>)
+                                (node != this.state.hidePlayer2) ? 
+                                <option key={index} className="option" value={node}>{node}</option> : <></>)
                             }
                     </select>
                     <select id={"nodeStrategy1Selector" + this.props.id}
@@ -89,10 +120,12 @@ class NodeWindow extends React.Component<CanvasProps, CanvasState>{
                     <select id={"player2Of" + this.props.id}
                             className="playerSelector"
                             defaultValue={this.props.startingPlayerTwo}
-                            data-test={"player2Of" + this.props.id}>
+                            data-test={"player2Of" + this.props.id}
+                            onChange={(e) => this.selectPlayer(e, 1)}>
                             {
                                 Object.keys(this.props.storePlayer).map((node, index) => 
-                                <option key={index} className="option" value={node}>{node}</option>)
+                                (node != this.state.hidePlayer1) ? 
+                                <option key={index} className="option" value={node}>{node}</option>: <></>)
                             }
                     </select>
                     <select id={"nodeStrategy2Selector" + this.props.id}

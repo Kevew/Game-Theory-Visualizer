@@ -9,6 +9,9 @@ type Action = {
 
 // Changes the player 1 of a specific node
 export const add_player = (state: State = initialState, action: Action): State => {
+    if(action.name == "Empty" || action.name == ""){
+      return {...state};
+    }
     let actionList = state.playerList;
     actionList[action.name] = {cnt: 0, points: 0, colorAsso: action.color};
     return {...state, playerList: actionList};

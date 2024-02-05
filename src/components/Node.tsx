@@ -51,6 +51,12 @@ class Node extends React.Component<CanvasProps, CanvasState>{
         }
     }
 
+    closeWindow = () => {
+        this.setState({
+            enableWindow: false
+        });
+    }
+
     render(){
         let loader;
         if(this.props.curr_node === Number(this.props.id)){
@@ -70,7 +76,7 @@ class Node extends React.Component<CanvasProps, CanvasState>{
                 <div data-test="node" id={this.props.id} onMouseUp={(e) => this.openWindow(e)} className={`nodeDiv ${(this.props.curr_node === Number(this.props.id)) ? 'selected' : ''}`} style={{left: this.props.posX, top: this.props.posY}}>
                     {loader}
                     <NodeColor pos={true} color={this.props.topPlayerColour}/>
-                    <NodeWindow id={this.props.id}/>
+                    <NodeWindow id={this.props.id} closeWindow={this.closeWindow}/>
                     <NodeColor pos={false} color={this.props.bottemPlayerColour}/>
                 </div>
             )
