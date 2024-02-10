@@ -12,7 +12,6 @@ import { mode_selector } from './reducers/Mode_Selector';
 import { set_current_sim_node } from './reducers/Set_Current_Sim_Node';
 import { delete_node } from './reducers/Delete_Node';
 import { add_connection } from './reducers/Add_Connection';
-import { NodeDict } from './states';
 import { reset_node_dict } from './reducers/Reset_NodeDict';
 
 // Define the action types

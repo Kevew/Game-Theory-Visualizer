@@ -1,5 +1,4 @@
 import { initialState, State } from '../states';
-import { NodeDict } from '../states';
 
 type Action = {
     type: 'RESETNODEDICT',

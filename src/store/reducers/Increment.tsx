@@ -8,7 +8,7 @@ type Action = {
 // Adds a new node to the store
 export const increment = (state: State = initialState, action: Action): State => {
     let newNode: NodeState = {
-        id: Number(action.node_id),
+        id: action.node_id,
         connect_to: [],
         connect_from: [],
         playerOne: Object.keys(state.playerList)[0],
