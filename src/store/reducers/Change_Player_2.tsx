@@ -1,6 +1,6 @@
 import { initialState, State } from '../states';
 
-type Action ={
+type Action = {
     type: 'CHANGE_PLAYER_2',
     player: string,
     node_id: string

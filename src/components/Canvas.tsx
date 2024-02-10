@@ -344,8 +344,14 @@ class Canvas extends React.Component<CanvasProps, CanvasState>{
                     }else if(newListofNode[oldNodeId].fromNodeConnect.has(valID)){
                         // Check if there is already a connection from starting node to new node
                         this.deleteConnection(this.state.connectState)
+                    }else if(newListofNode[valID].toArrowConnect.length > 2){
+                        // If there are two connections going to it
+                        this.deleteConnection(this.state.connectState)
                     }else{
                         newListofNode[oldNodeId].fromNodeConnect.add(valID);
+                        this.props.dispatch({type: "ADDCONNECTION",
+                                            id: oldNodeId,
+                                            to_connect: valID});
                         this.setState({
                             listOfConnection: _newListofConnection,
                             listOfNode: newListofNode,

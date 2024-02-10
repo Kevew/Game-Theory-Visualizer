@@ -7,9 +7,11 @@ export type Color = RGB | RGBA | HEX | string;
 // The information each node holds 
 export interface NodeState{
     // The id of the node
-    id: number;
+    id: string;
     // Which nodes the current node is connected to
-    connect_to: number[];
+    connect_to: string[];
+    // Which nodes the current node is from
+    connect_from: string[];
     // Player 1 of the node
     playerOne: string;
     // Player 2 of the node

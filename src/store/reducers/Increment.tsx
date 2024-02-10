@@ -10,6 +10,7 @@ export const increment = (state: State = initialState, action: Action): State =>
     let newNode: NodeState = {
         id: Number(action.node_id),
         connect_to: [],
+        connect_from: [],
         playerOne: Object.keys(state.playerList)[0],
         playerTwo: Object.keys(state.playerList)[0],
         strategyOne: 'Empty',

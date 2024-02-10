@@ -11,6 +11,9 @@ import { add_player } from './reducers/Add_Player';
 import { mode_selector } from './reducers/Mode_Selector';
 import { set_current_sim_node } from './reducers/Set_Current_Sim_Node';
 import { delete_node } from './reducers/Delete_Node';
+import { add_connection } from './reducers/Add_Connection';
+import { NodeDict } from './states';
+import { reset_node_dict } from './reducers/Reset_NodeDict';
 
 // Define the action types
 type Action =
@@ -44,20 +47,27 @@ type Action =
     node_id: string
   }|
   {
-  type: 'RESETPOINTS'
+    type: 'RESETPOINTS'
   }|{
-  type: 'ADDPLAYER',
-  name: string,
-  color: Color
+    type: 'ADDPLAYER',
+    name: string,
+    color: Color
   }|{
-  type: 'MODESELECTOR',
-  mode: number
+    type: 'MODESELECTOR',
+    mode: number
   }|{
-  type: 'SIMULATIONNODESELECTOR',
-  node_id: number
-}|{
-  type: 'DELETENODE',
-  node_id: number
+    type: 'SIMULATIONNODESELECTOR',
+    node_id: number
+  }|{
+    type: 'DELETENODE',
+    node_id: number
+  }|{
+    type: 'ADDCONNECTION',
+    id: string,
+    to_connect: string
+  }|{
+    type: 'RESETNODEDICT',
+    new_node_dict: string[]
 };
 
 // Define the reducer
@@ -87,6 +97,10 @@ const reducer = (state: State = initialState, action: Action): State => {
       return set_current_sim_node(state, action);
     case 'DELETENODE':
       return delete_node(state, action);
+    case 'ADDCONNECTION':
+      return add_connection(state, action);
+    case 'RESETNODEDICT':
+      return reset_node_dict(state, action);
     default:
       return state;
   }

@@ -7,6 +7,5 @@ export const reset_points = (state: State = initialState): State => {
         pointsTable[key].points = 0;
     });
     
-      
     return {...state, playerList: pointsTable};
 }
